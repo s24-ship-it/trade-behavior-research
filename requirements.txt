@@ -1,0 +1,2 @@
+# XLSX I/O is optional; CSV analysis works with Python standard library.
+openpyxl>=3.1,<4

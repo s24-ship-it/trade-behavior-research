@@ -1,0 +1,7705 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "TRADE-BEHAVIOR-RESEARCH-2026-11-20",
+  "title": "売買履歴からの取引成績評価と人間の意思決定特性の多層推論",
+  "as_of_date": "2026-11-20",
+  "language": "ja-JP",
+  "document_type": "conceptual_methodology",
+  "research_status": "RESEARCH_ONLY",
+  "empirical_data_analyzed": false,
+  "sample_metrics": false,
+  "metric_count": 379,
+  "category_count": 29,
+  "data_sources": {
+    "H": "約定・ポジション履歴",
+    "P": "価格・市場時系列（決定時点の利用可能性を保持）",
+    "O": "注文・取消・修正・約定履歴",
+    "A": "口座残高・含み損益・入出金・証拠金",
+    "J": "事前戦略・取引日誌・本人の任意報告",
+    "X": "外部指標・経済イベント・取引所仕様"
+  },
+  "evidence_levels": {
+    "L0": "raw observed records, verified provenance",
+    "L1": "deterministic derived measures with definitions",
+    "L2": "association estimated with uncertainty",
+    "L3": "falsifiable psychological or causal hypothesis; multiple explanations",
+    "L4": "corroborated and prospective evidence, still limited",
+    "NI": "not identifiable from trading history alone"
+  },
+  "inference_types": {
+    "observed": "quantifiable from declared inputs, not necessarily causal",
+    "hypothesis": "must not be stated as diagnosed fact",
+    "counterfactual": "simulation only, dependent on execution assumptions",
+    "inference": "requires uncertainty and out-of-sample tests",
+    "not_identifiable": "trading records cannot identify causal background/neural or clinical status"
+  },
+  "prohibitions": [
+    "Do not infer childhood environment, family income, trauma, or life history from trades.",
+    "Do not infer brain activation, neurotransmitters, ADHD, autism or diagnoses from trades.",
+    "Do not label trader as impulsive, addicted or emotionally unstable based only on one behavior.",
+    "Do not create empirical metrics, prices, confidence intervals, profits or diagnoses absent data.",
+    "Do not claim causality from conditional profit/loss associations.",
+    "Do not compute MFE/MAE or path-dependent stops without suitable intrahold price data.",
+    "Do not reuse future revised features or optimize and validate on same data.",
+    "Do not propose or execute live orders. Preserve hard stops and max risk."
+  ],
+  "references": [
+    {
+      "id": "R01",
+      "bibliography": "Kahneman, D., & Tversky, A. (1979). Prospect Theory: An Analysis of Decision under Risk. Econometrica, 47(2), 263–292. https://www.jstor.org/stable/1914185",
+      "url": "https://www.jstor.org/stable/1914185"
+    },
+    {
+      "id": "R02",
+      "bibliography": "Shefrin, H., & Statman, M. (1985). The Disposition to Sell Winners Too Early and Ride Losers Too Long: Theory and Evidence. The Journal of Finance, 40(3), 777–790. https://doi.org/10.1111/j.1540-6261.1985.tb05002.x",
+      "url": "https://doi.org/10.1111/j.1540-6261.1985.tb05002.x"
+    },
+    {
+      "id": "R03",
+      "bibliography": "Odean, T. (1998). Are Investors Reluctant to Realize Their Losses? The Journal of Finance, 53(5), 1775–1798. https://doi.org/10.1111/0022-1082.00072",
+      "url": "https://doi.org/10.1111/0022-1082.00072"
+    },
+    {
+      "id": "R04",
+      "bibliography": "Barber, B. M., & Odean, T. (2000). Trading Is Hazardous to Your Wealth: The Common Stock Investment Performance of Individual Investors. The Journal of Finance, 55(2), 773–806. https://doi.org/10.1111/0022-1082.00226",
+      "url": "https://doi.org/10.1111/0022-1082.00226"
+    },
+    {
+      "id": "R05",
+      "bibliography": "Grinblatt, M., & Keloharju, M. (2009). Sensation Seeking, Overconfidence, and Trading Activity. The Journal of Finance, 64(2), 549–578. https://doi.org/10.1111/j.1540-6261.2009.01443.x",
+      "url": "https://doi.org/10.1111/j.1540-6261.2009.01443.x"
+    },
+    {
+      "id": "R06",
+      "bibliography": "Mischel, W., & Shoda, Y. (1995). A Cognitive-Affective System Theory of Personality: Reconceptualizing Situations, Dispositions, Dynamics, and Invariance in Personality Structure. Psychological Review, 102(2), 246–268. https://doi.org/10.1037/0033-295X.102.2.246",
+      "url": "https://doi.org/10.1037/0033-295X.102.2.246"
+    },
+    {
+      "id": "R07",
+      "bibliography": "Poldrack, R. A. (2006). Can Cognitive Processes Be Inferred from Neuroimaging Data? Trends in Cognitive Sciences, 10(2), 59–63. https://doi.org/10.1016/j.tics.2005.12.004",
+      "url": "https://doi.org/10.1016/j.tics.2005.12.004"
+    },
+    {
+      "id": "R08",
+      "bibliography": "Daw, N. D., Niv, Y., & Dayan, P. (2005). Uncertainty-Based Competition between Prefrontal and Dorsolateral Striatal Systems for Behavioral Control. Nature Neuroscience, 8, 1704–1711. https://doi.org/10.1038/nn1560",
+      "url": "https://doi.org/10.1038/nn1560"
+    },
+    {
+      "id": "R09",
+      "bibliography": "Lo, A. W. (2004). The Adaptive Markets Hypothesis: Market Efficiency from an Evolutionary Perspective. The Journal of Portfolio Management, 30(5), 15–29. https://doi.org/10.3905/jpm.2004.442611",
+      "url": "https://doi.org/10.3905/jpm.2004.442611"
+    },
+    {
+      "id": "R10",
+      "bibliography": "White, H. (2000). A Reality Check for Data Snooping. Econometrica, 68(5), 1097–1126. https://doi.org/10.1111/1468-0262.00152",
+      "url": "https://doi.org/10.1111/1468-0262.00152"
+    },
+    {
+      "id": "R11",
+      "bibliography": "Bailey, D. H., & López de Prado, M. (2014). The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality. The Journal of Portfolio Management, 40(5), 94–107. https://doi.org/10.3905/jpm.2014.40.5.094",
+      "url": "https://doi.org/10.3905/jpm.2014.40.5.094"
+    },
+    {
+      "id": "R12",
+      "bibliography": "Benjamini, Y., & Hochberg, Y. (1995). Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing. Journal of the Royal Statistical Society, Series B, 57(1), 289–300. https://doi.org/10.1111/j.2517-6161.1995.tb02031.x",
+      "url": "https://doi.org/10.1111/j.2517-6161.1995.tb02031.x"
+    },
+    {
+      "id": "R13",
+      "bibliography": "Markowitz, H. (1952). Portfolio Selection. The Journal of Finance, 7(1), 77–91. https://doi.org/10.1111/j.1540-6261.1952.tb01525.x",
+      "url": "https://doi.org/10.1111/j.1540-6261.1952.tb01525.x"
+    },
+    {
+      "id": "R14",
+      "bibliography": "Rockafellar, R. T., & Uryasev, S. (2000). Optimization of Conditional Value-at-Risk. The Journal of Risk, 2(3), 21–41. https://doi.org/10.21314/JOR.2000.038",
+      "url": "https://doi.org/10.21314/JOR.2000.038"
+    },
+    {
+      "id": "R15",
+      "bibliography": "Hinds, J., & Joinson, A. N. (2024). Digital Data and Personality: A Systematic Review and Meta-Analysis of Human Perception and Computer Prediction. Psychological Bulletin, 150(6), 727–766. https://doi.org/10.1037/bul0000430",
+      "url": "https://doi.org/10.1037/bul0000430"
+    },
+    {
+      "id": "R16",
+      "bibliography": "Almlund, M., Duckworth, A. L., Heckman, J. J., & Kautz, T. (2011). Personality Psychology and Economics. NBER Working Paper 16822. https://doi.org/10.3386/w16822",
+      "url": "https://doi.org/10.3386/w16822"
+    }
+  ],
+  "categories": [
+    {
+      "id": "D01",
+      "name": "データ品質・取引構造",
+      "disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D01-001",
+        "D01-002",
+        "D01-003",
+        "D01-004",
+        "D01-005",
+        "D01-006",
+        "D01-007",
+        "D01-008",
+        "D01-009",
+        "D01-010",
+        "D01-011"
+      ]
+    },
+    {
+      "id": "D02",
+      "name": "基本成績・期待値",
+      "disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D02-001",
+        "D02-002",
+        "D02-003",
+        "D02-004",
+        "D02-005",
+        "D02-006",
+        "D02-007",
+        "D02-008",
+        "D02-009",
+        "D02-010",
+        "D02-011",
+        "D02-012",
+        "D02-013",
+        "D02-014"
+      ]
+    },
+    {
+      "id": "D03",
+      "name": "損益分布・極端値",
+      "disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D03-001",
+        "D03-002",
+        "D03-003",
+        "D03-004",
+        "D03-005",
+        "D03-006",
+        "D03-007",
+        "D03-008",
+        "D03-009",
+        "D03-010",
+        "D03-011"
+      ]
+    },
+    {
+      "id": "D04",
+      "name": "リスク・ドローダウン",
+      "disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D04-001",
+        "D04-002",
+        "D04-003",
+        "D04-004",
+        "D04-005",
+        "D04-006",
+        "D04-007",
+        "D04-008",
+        "D04-009",
+        "D04-010",
+        "D04-011",
+        "D04-012",
+        "D04-013",
+        "D04-014"
+      ]
+    },
+    {
+      "id": "D05",
+      "name": "ロット・資金管理",
+      "disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D05-001",
+        "D05-002",
+        "D05-003",
+        "D05-004",
+        "D05-005",
+        "D05-006",
+        "D05-007",
+        "D05-008",
+        "D05-009",
+        "D05-010",
+        "D05-011",
+        "D05-012"
+      ]
+    },
+    {
+      "id": "D06",
+      "name": "銘柄・商品別適性",
+      "disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D06-001",
+        "D06-002",
+        "D06-003",
+        "D06-004",
+        "D06-005",
+        "D06-006",
+        "D06-007",
+        "D06-008",
+        "D06-009",
+        "D06-010",
+        "D06-011"
+      ]
+    },
+    {
+      "id": "D07",
+      "name": "ロング・ショート適性",
+      "disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D07-001",
+        "D07-002",
+        "D07-003",
+        "D07-004",
+        "D07-005",
+        "D07-006",
+        "D07-007",
+        "D07-008"
+      ]
+    },
+    {
+      "id": "D08",
+      "name": "エントリーの質",
+      "disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D08-001",
+        "D08-002",
+        "D08-003",
+        "D08-004",
+        "D08-005",
+        "D08-006",
+        "D08-007",
+        "D08-008",
+        "D08-009",
+        "D08-010",
+        "D08-011",
+        "D08-012",
+        "D08-013"
+      ]
+    },
+    {
+      "id": "D09",
+      "name": "決済・利確・損切り",
+      "disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D09-001",
+        "D09-002",
+        "D09-003",
+        "D09-004",
+        "D09-005",
+        "D09-006",
+        "D09-007",
+        "D09-008",
+        "D09-009",
+        "D09-010",
+        "D09-011",
+        "D09-012",
+        "D09-013",
+        "D09-014",
+        "D09-015"
+      ]
+    },
+    {
+      "id": "D10",
+      "name": "保有時間・時間効率",
+      "disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D10-001",
+        "D10-002",
+        "D10-003",
+        "D10-004",
+        "D10-005",
+        "D10-006",
+        "D10-007",
+        "D10-008",
+        "D10-009",
+        "D10-010",
+        "D10-011",
+        "D10-012"
+      ]
+    },
+    {
+      "id": "D11",
+      "name": "時間帯・曜日・カレンダー",
+      "disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D11-001",
+        "D11-002",
+        "D11-003",
+        "D11-004",
+        "D11-005",
+        "D11-006",
+        "D11-007",
+        "D11-008",
+        "D11-009",
+        "D11-010",
+        "D11-011",
+        "D11-012",
+        "D11-013"
+      ]
+    },
+    {
+      "id": "D12",
+      "name": "テクニカル・価格パターン",
+      "disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D12-001",
+        "D12-002",
+        "D12-003",
+        "D12-004",
+        "D12-005",
+        "D12-006",
+        "D12-007",
+        "D12-008",
+        "D12-009",
+        "D12-010",
+        "D12-011",
+        "D12-012",
+        "D12-013"
+      ]
+    },
+    {
+      "id": "D13",
+      "name": "相場レジーム・環境",
+      "disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D13-001",
+        "D13-002",
+        "D13-003",
+        "D13-004",
+        "D13-005",
+        "D13-006",
+        "D13-007",
+        "D13-008",
+        "D13-009",
+        "D13-010",
+        "D13-011",
+        "D13-012"
+      ]
+    },
+    {
+      "id": "D14",
+      "name": "約定品質・コスト",
+      "disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D14-001",
+        "D14-002",
+        "D14-003",
+        "D14-004",
+        "D14-005",
+        "D14-006",
+        "D14-007",
+        "D14-008",
+        "D14-009",
+        "D14-010",
+        "D14-011",
+        "D14-012",
+        "D14-013"
+      ]
+    },
+    {
+      "id": "D15",
+      "name": "複数ポジション・資産配分",
+      "disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D15-001",
+        "D15-002",
+        "D15-003",
+        "D15-004",
+        "D15-005",
+        "D15-006",
+        "D15-007",
+        "D15-008",
+        "D15-009",
+        "D15-010",
+        "D15-011"
+      ]
+    },
+    {
+      "id": "D16",
+      "name": "連勝・連敗・売買連鎖",
+      "disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D16-001",
+        "D16-002",
+        "D16-003",
+        "D16-004",
+        "D16-005",
+        "D16-006",
+        "D16-007",
+        "D16-008",
+        "D16-009",
+        "D16-010",
+        "D16-011",
+        "D16-012"
+      ]
+    },
+    {
+      "id": "D17",
+      "name": "認知バイアスの行動指標",
+      "disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "metric_ids": [
+        "D17-001",
+        "D17-002",
+        "D17-003",
+        "D17-004",
+        "D17-005",
+        "D17-006",
+        "D17-007",
+        "D17-008",
+        "D17-009",
+        "D17-010",
+        "D17-011",
+        "D17-012",
+        "D17-013",
+        "D17-014",
+        "D17-015",
+        "D17-016",
+        "D17-017"
+      ]
+    },
+    {
+      "id": "D18",
+      "name": "外部ニュース・マクロ要因",
+      "disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D18-001",
+        "D18-002",
+        "D18-003",
+        "D18-004",
+        "D18-005",
+        "D18-006",
+        "D18-007",
+        "D18-008",
+        "D18-009"
+      ]
+    },
+    {
+      "id": "D19",
+      "name": "手法変更・学習効果",
+      "disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "metric_ids": [
+        "D19-001",
+        "D19-002",
+        "D19-003",
+        "D19-004",
+        "D19-005",
+        "D19-006",
+        "D19-007",
+        "D19-008",
+        "D19-009",
+        "D19-010",
+        "D19-011",
+        "D19-012"
+      ]
+    },
+    {
+      "id": "D20",
+      "name": "反実仮想・決済シミュレーション",
+      "disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "metric_ids": [
+        "D20-001",
+        "D20-002",
+        "D20-003",
+        "D20-004",
+        "D20-005",
+        "D20-006",
+        "D20-007",
+        "D20-008",
+        "D20-009",
+        "D20-010",
+        "D20-011",
+        "D20-012",
+        "D20-013",
+        "D20-014",
+        "D20-015",
+        "D20-016"
+      ]
+    },
+    {
+      "id": "D21",
+      "name": "統計的信頼性・再現性",
+      "disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "metric_ids": [
+        "D21-001",
+        "D21-002",
+        "D21-003",
+        "D21-004",
+        "D21-005",
+        "D21-006",
+        "D21-007",
+        "D21-008",
+        "D21-009",
+        "D21-010",
+        "D21-011",
+        "D21-012",
+        "D21-013",
+        "D21-014",
+        "D21-015",
+        "D21-016",
+        "D21-017",
+        "D21-018",
+        "D21-019",
+        "D21-020"
+      ]
+    },
+    {
+      "id": "D22",
+      "name": "規律・業務上のリスク",
+      "disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "D22-001",
+        "D22-002",
+        "D22-003",
+        "D22-004",
+        "D22-005",
+        "D22-006",
+        "D22-007",
+        "D22-008",
+        "D22-009",
+        "D22-010"
+      ]
+    },
+    {
+      "id": "P01",
+      "name": "パーソナリティ関連仮説",
+      "disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "metric_ids": [
+        "P01-001",
+        "P01-002",
+        "P01-003",
+        "P01-004",
+        "P01-005",
+        "P01-006",
+        "P01-007",
+        "P01-008",
+        "P01-009",
+        "P01-010",
+        "P01-011",
+        "P01-012",
+        "P01-013",
+        "P01-014",
+        "P01-015",
+        "P01-016",
+        "P01-017"
+      ]
+    },
+    {
+      "id": "P02",
+      "name": "思考・認知スタイル",
+      "disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "metric_ids": [
+        "P02-001",
+        "P02-002",
+        "P02-003",
+        "P02-004",
+        "P02-005",
+        "P02-006",
+        "P02-007",
+        "P02-008",
+        "P02-009",
+        "P02-010",
+        "P02-011",
+        "P02-012",
+        "P02-013",
+        "P02-014",
+        "P02-015",
+        "P02-016"
+      ]
+    },
+    {
+      "id": "P03",
+      "name": "習慣・反復行動",
+      "disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "metric_ids": [
+        "P03-001",
+        "P03-002",
+        "P03-003",
+        "P03-004",
+        "P03-005",
+        "P03-006",
+        "P03-007",
+        "P03-008",
+        "P03-009",
+        "P03-010",
+        "P03-011",
+        "P03-012",
+        "P03-013",
+        "P03-014"
+      ]
+    },
+    {
+      "id": "P04",
+      "name": "情動・ストレス反応の仮説",
+      "disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "metric_ids": [
+        "P04-001",
+        "P04-002",
+        "P04-003",
+        "P04-004",
+        "P04-005",
+        "P04-006",
+        "P04-007",
+        "P04-008",
+        "P04-009",
+        "P04-010"
+      ]
+    },
+    {
+      "id": "P05",
+      "name": "得意分野・技能の仮説",
+      "disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "metric_ids": [
+        "P05-001",
+        "P05-002",
+        "P05-003",
+        "P05-004",
+        "P05-005",
+        "P05-006",
+        "P05-007",
+        "P05-008",
+        "P05-009",
+        "P05-010",
+        "P05-011",
+        "P05-012",
+        "P05-013",
+        "P05-014",
+        "P05-015",
+        "P05-016"
+      ]
+    },
+    {
+      "id": "P06",
+      "name": "神経科学的研究との接点",
+      "disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "metric_ids": [
+        "P06-001",
+        "P06-002",
+        "P06-003",
+        "P06-004",
+        "P06-005",
+        "P06-006",
+        "P06-007",
+        "P06-008",
+        "P06-009",
+        "P06-010",
+        "P06-011",
+        "P06-012",
+        "P06-013",
+        "P06-014"
+      ]
+    },
+    {
+      "id": "P07",
+      "name": "生育環境・形成要因の研究",
+      "disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "metric_ids": [
+        "P07-001",
+        "P07-002",
+        "P07-003",
+        "P07-004",
+        "P07-005",
+        "P07-006",
+        "P07-007",
+        "P07-008",
+        "P07-009",
+        "P07-010",
+        "P07-011",
+        "P07-012",
+        "P07-013"
+      ]
+    }
+  ],
+  "metrics": [
+    {
+      "id": "D01-001",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "約定件数と取引件数",
+      "research_question": "分割約定と完結取引を混同していないか",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-002",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "ポジション再構成",
+      "research_question": "新規建てから最終決済への対応を復元できるか",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-003",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "FIFO・平均法による対応差",
+      "research_question": "建玉対応方式により計算結果が変わるか",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-004",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "分割エントリー",
+      "research_question": "複数回に分けて建てる頻度",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-005",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "分割決済",
+      "research_question": "一部利確・一部損切りの頻度",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-006",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "ドテン取引",
+      "research_question": "決済直後に反対方向の建玉を持つ割合",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-007",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "未決済・部分決済建玉",
+      "research_question": "含み損益と実現損益を区別できるか",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-008",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "損益計算の照合",
+      "research_question": "契約倍率・為替・手数料を反映した整合性",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-009",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "欠損・重複・異常値",
+      "research_question": "時刻・価格・数量の不正データ検出",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-010",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "時刻の整合性",
+      "research_question": "UTC・JST・DST・取引所時刻の整合性",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D01-011",
+      "category_id": "D01",
+      "category": "データ品質・取引構造",
+      "metric": "銘柄コードの名寄せ",
+      "research_question": "同一原資産・商品を一貫して集計できるか",
+      "academic_disciplines": [
+        "データ工学",
+        "金融会計"
+      ],
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-001",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "総損益・純損益",
+      "research_question": "期間の実現損益と費用控除後損益",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-002",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "総利益・総損失",
+      "research_question": "勝ち取引と負け取引の金額の合計",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-003",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "勝率・敗率・建値率",
+      "research_question": "勝敗とゼロ損益の構成",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-004",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "平均勝ち・平均負け",
+      "research_question": "典型的な利益額と損失額",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-005",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "ペイオフレシオ",
+      "research_question": "平均勝ちに対する平均負けの大きさ",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-006",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "プロフィットファクター",
+      "research_question": "総利益と総損失の比",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-007",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "期待損益",
+      "research_question": "一取引当たりの費用控除後平均損益",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-008",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "損益分岐勝率",
+      "research_question": "平均損益幅の下で必要な勝率",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-009",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "損益中央値",
+      "research_question": "少数の外れ値に左右されない典型値",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-010",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "利益貢献率",
+      "research_question": "特定取引が総利益をどれほど支えるか",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-011",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "期間別損益",
+      "research_question": "日・週・月の収益変遷",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-012",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "累積損益曲線",
+      "research_question": "成績改善・悪化の時間的経路",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-013",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "資金効率",
+      "research_question": "使用資金・拘束時間に対する収益",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D02-014",
+      "category_id": "D02",
+      "category": "基本成績・期待値",
+      "metric": "経費比率",
+      "research_question": "費用の損益に占める割合",
+      "academic_disciplines": [
+        "確率論",
+        "金融統計"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-001",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "標準偏差・分散",
+      "research_question": "取引単位の損益のばらつき",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-002",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "歪度",
+      "research_question": "大勝ち型か大負け型かという分布の非対称性",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-003",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "尖度",
+      "research_question": "裾の厚さと極端な値への感応",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-004",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "損益分位点",
+      "research_question": "下位1・5・10％などの損失水準",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-005",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "最大利益・最大損失",
+      "research_question": "観測された極端値",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-006",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "外れ値除去後PF",
+      "research_question": "少数の極端値への依存度",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-007",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "トップ10取引寄与",
+      "research_question": "上位の取引が総利益を支える程度",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-008",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "損失集中度",
+      "research_question": "少数の大損失が全体を支配するか",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-009",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "多峰性",
+      "research_question": "異なる戦略・相場の混在兆候",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-010",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "厚い裾の推定",
+      "research_question": "正規分布では説明しにくい損益",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D03-011",
+      "category_id": "D03",
+      "category": "損益分布・極端値",
+      "metric": "利益と損失の非対称性",
+      "research_question": "小勝ち大負けの構造",
+      "academic_disciplines": [
+        "数理統計",
+        "極値理論"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-001",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "最大ドローダウン",
+      "research_question": "時価評価資産のピークからの最大落ち込み",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-002",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "平均ドローダウン",
+      "research_question": "日常的な資産減少幅",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-003",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "回復期間",
+      "research_question": "過去最高資産への復帰に要する時間",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-004",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "水面下期間割合",
+      "research_question": "過去最高資産を下回る時間割合",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-005",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "Ulcer Index",
+      "research_question": "資産減少の深さ・長さ",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-006",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "Sharpe Ratio",
+      "research_question": "超過リターンに対する総リスク",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-007",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "Sortino Ratio",
+      "research_question": "下方変動に対する収益効率",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-008",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "Calmar Ratio",
+      "research_question": "最大DDに対する年率リターン",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-009",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "VaR",
+      "research_question": "所定期間の損失分位点",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-010",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "Expected Shortfall",
+      "research_question": "悪い尾部での条件付き平均損失",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-011",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "破産確率のシナリオ推定",
+      "research_question": "資金枯渇の条件付きリスク",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-012",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "日次損失集中度",
+      "research_question": "特定日への損失偏在",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-013",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "連続DDエピソード",
+      "research_question": "複数の大きな資産減少の発生",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D04-014",
+      "category_id": "D04",
+      "category": "リスク・ドローダウン",
+      "metric": "含み損益由来DD",
+      "research_question": "実現損益だけでは見えない資産変動",
+      "academic_disciplines": [
+        "リスク計量",
+        "保険数理"
+      ],
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-001",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "平均ロット・変動係数",
+      "research_question": "建玉規模の一貫性",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-002",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "勝敗別ロット差",
+      "research_question": "勝つ時と負ける時の建玉規模の違い",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-003",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "リスク資産比率",
+      "research_question": "予定損失額の口座資産に対する比",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-004",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "実効レバレッジ",
+      "research_question": "資産に対する総ポジション倍率",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-005",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "初期ストップ距離",
+      "research_question": "参入時の損失限定幅",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-006",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "R-Multiple",
+      "research_question": "初期想定損失に対する実現損益",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-007",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "Kelly比率の参考値",
+      "research_question": "仮定した分布下の理論的成長率最大化比率",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-008",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "ロット増額後の成績",
+      "research_question": "増額行動と結果の関係",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-009",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "ナンピン頻度・影響",
+      "research_question": "逆行中の追加建ての影響",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-010",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "ピラミッディング影響",
+      "research_question": "順行中の追加建ての影響",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-011",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "余力フロア違反",
+      "research_question": "最低証拠金余力を守ったか",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D05-012",
+      "category_id": "D05",
+      "category": "ロット・資金管理",
+      "metric": "損失上限違反",
+      "research_question": "日次・取引別の損失制約の順守",
+      "academic_disciplines": [
+        "最適制御",
+        "ポートフォリオ理論"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-001",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別純損益",
+      "research_question": "銘柄ごとの利益と損失",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-002",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別勝率",
+      "research_question": "銘柄による勝敗の違い",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-003",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別期待値",
+      "research_question": "取引当たりの収益効率",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-004",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別PF",
+      "research_question": "利益と損失の釣り合い",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-005",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別取引頻度",
+      "research_question": "特定銘柄への偏り",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-006",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別保有時間",
+      "research_question": "商品特性と保有時間の関係",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-007",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別方向適性",
+      "research_question": "買い・売り方向ごとの成績",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-008",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別ボラティリティ適性",
+      "research_question": "変動率による成績差",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-009",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別手数料・資金調達費",
+      "research_question": "商品条件による利益減少",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-010",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "銘柄別大損失寄与度",
+      "research_question": "全体のテール損失への寄与",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D06-011",
+      "category_id": "D06",
+      "category": "銘柄・商品別適性",
+      "metric": "資産クラス別比較",
+      "research_question": "指数・FX・貴金属などの比較",
+      "academic_disciplines": [
+        "資産価格理論",
+        "比較統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-001",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "ロング勝率",
+      "research_question": "買い方向で勝つ確率",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-002",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "ショート勝率",
+      "research_question": "売り方向で勝つ確率",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-003",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "方向別期待値差",
+      "research_question": "買いと売りの期待損益の差",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-004",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "方向別平均損失",
+      "research_question": "一方向で損失が肥大化するか",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-005",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "方向別保有時間",
+      "research_question": "買い・売りで決済行動が異なるか",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-006",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "方向別トレンド適合",
+      "research_question": "市場方向への追随の成績",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-007",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "逆張り・順張り比率",
+      "research_question": "トレンドに逆行・追随する頻度",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D07-008",
+      "category_id": "D07",
+      "category": "ロング・ショート適性",
+      "metric": "方向反転後の成績",
+      "research_question": "ドテン判断が有効か",
+      "academic_disciplines": [
+        "方向性戦略",
+        "条件付き統計"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-001",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "エントリー直後リターン",
+      "research_question": "5・15・60分後の方向調整後損益",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-002",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "直後逆行率",
+      "research_question": "参入直後に不利な方向へ進む割合",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-003",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "当日レンジ内の位置",
+      "research_question": "高値・安値のどの位置で入るか",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-004",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "直前トレンド一致度",
+      "research_question": "価格傾向に順行しているか",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-005",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "ブレイクアウト参入成功率",
+      "research_question": "価格突破直後の成績",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-006",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "押し目・戻り目参入成功率",
+      "research_question": "調整後のエントリー効果",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-007",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "指標シグナル一致度",
+      "research_question": "MA・RSI等の既知情報との整合",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-008",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "複数時間足一致度",
+      "research_question": "上位足と下位足の方向一致",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-009",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "エントリー遅延影響",
+      "research_question": "時刻変更による反実仮想損益",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-010",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "参入後最大逆行",
+      "research_question": "保有期間中のMAE",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-011",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "参入後最大順行",
+      "research_question": "保有期間中のMFE",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-012",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "失敗パターンの再現性",
+      "research_question": "負けエントリーの共通条件",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D08-013",
+      "category_id": "D08",
+      "category": "エントリーの質",
+      "metric": "参入理由の再現性",
+      "research_question": "記録した判断理由と実際のシグナルの一致",
+      "academic_disciplines": [
+        "イベントスタディ",
+        "時系列予測"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-001",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "利確タイミング",
+      "research_question": "含み益に対する決済時点",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-002",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "損切りタイミング",
+      "research_question": "含み損に対する決済時点",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-003",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "MFE",
+      "research_question": "保有中の最大有利価格変化",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-004",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "MAE",
+      "research_question": "保有中の最大不利価格変化",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-005",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "MFE捕捉率",
+      "research_question": "最大含み益のうち実現した割合",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-006",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "利益吐き出し率",
+      "research_question": "最大含み益から決済までの減少",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-007",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "初期ストップ逸脱",
+      "research_question": "事前設定した損切り幅への違反",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-008",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "早すぎる利確仮説",
+      "research_question": "決済後の有利な値動きが継続するか",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-009",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "決済後の逆行・反転",
+      "research_question": "決済以後の価格経路",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-010",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "建値撤退の効果",
+      "research_question": "建値ストップの費用込みでの損益",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-011",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "固定利確の効果",
+      "research_question": "一定目標値での決済シミュレーション",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-012",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "トレーリングストップ効果",
+      "research_question": "追随型ストップの損益とリスク",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-013",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "分割利確効果",
+      "research_question": "一括決済との比較",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-014",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "手動介入の寄与",
+      "research_question": "当初注文と変更後結果の差",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D09-015",
+      "category_id": "D09",
+      "category": "決済・利確・損切り",
+      "metric": "損失限定と利益伸長の両立",
+      "research_question": "利確・損切りの非対称性",
+      "academic_disciplines": [
+        "最適停止",
+        "動的意思決定"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-001",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "平均・中央値保有時間",
+      "research_question": "取引の典型的な継続時間",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-002",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "勝ち取引保有時間",
+      "research_question": "勝つ取引の時間分布",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-003",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "負け取引保有時間",
+      "research_question": "負ける取引の時間分布",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-004",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "保有時間別勝率",
+      "research_question": "時間帯別ではなく長さ別の勝率",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-005",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "保有時間別期待値",
+      "research_question": "長時間保有の損益効率",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-006",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "時間当たり利益",
+      "research_question": "資金拘束時間当たりの成果",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-007",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "利益到達時間",
+      "research_question": "目標利益到達までの時間",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-008",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "損切り到達時間",
+      "research_question": "設定ストップ到達までの時間",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-009",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "利益経路のハザード",
+      "research_question": "利益到達・決済が発生する時間依存",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-010",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "タイムストップ仮説",
+      "research_question": "時間制限決済の効果",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-011",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "保有時間二極化",
+      "research_question": "短期決済と長期塩漬けの混在",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D10-012",
+      "category_id": "D10",
+      "category": "保有時間・時間効率",
+      "metric": "未決済の検閲処理",
+      "research_question": "保有中の建玉を無理に確定させない",
+      "academic_disciplines": [
+        "生存時間解析",
+        "First-passage理論"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-001",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "時間帯別勝率",
+      "research_question": "時刻帯ごとの勝敗差",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-002",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "時間帯別期待値",
+      "research_question": "時刻帯ごとの平均損益",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-003",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "曜日別勝率",
+      "research_question": "曜日に依存する勝敗差",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-004",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "曜日別PF",
+      "research_question": "曜日での利益損失効率",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-005",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "月別・四半期別成績",
+      "research_question": "季節性の探索",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-006",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "週初・週末効果",
+      "research_question": "月曜・金曜の成績差",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-007",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "市場セッション別成績",
+      "research_question": "東京・ロンドン・NY時間の比較",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-008",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "オープン直後の成績",
+      "research_question": "寄り付き直後のリスク",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-009",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "クローズ直前の成績",
+      "research_question": "引け前のリスク",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-010",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "指標発表前後の成績",
+      "research_question": "イベント時の成績",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-011",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "日内取引順序",
+      "research_question": "その日の何回目の取引か",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-012",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "日跨ぎ・週跨ぎ保有",
+      "research_question": "オーバーナイト・ギャップ影響",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D11-013",
+      "category_id": "D11",
+      "category": "時間帯・曜日・カレンダー",
+      "metric": "DST補正の効果",
+      "research_question": "時差変更でカテゴリがずれないか",
+      "academic_disciplines": [
+        "季節性",
+        "市場マイクロストラクチャー"
+      ],
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-001",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "移動平均線位置",
+      "research_question": "価格とMAの上下関係",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-002",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "移動平均線傾き",
+      "research_question": "トレンドの局所的傾向",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-003",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "移動平均クロス",
+      "research_question": "クロス後の期待値",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-004",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "RSI状態",
+      "research_question": "買われ過ぎ・売られ過ぎ指標との関係",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-005",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "MACD状態",
+      "research_question": "モメンタム指標との関係",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-006",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "ATR状態",
+      "research_question": "値幅に対するストップや目標の相対位置",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-007",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "ボリンジャーバンド位置",
+      "research_question": "相対的価格水準との関係",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-008",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "VWAP乖離",
+      "research_question": "出来高加重平均価格との距離",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-009",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "ローソク足形状",
+      "research_question": "実体・ヒゲなどの形状分類",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-010",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "サポート・レジスタンス",
+      "research_question": "節目への距離",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-011",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "一目均衡表との関係",
+      "research_question": "雲・基準線等との位置",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-012",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "価格収縮からの拡大",
+      "research_question": "レンジ突破の環境",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D12-013",
+      "category_id": "D12",
+      "category": "テクニカル・価格パターン",
+      "metric": "直近高安への距離",
+      "research_question": "突破や反転の可能性",
+      "academic_disciplines": [
+        "シグナル処理",
+        "統計的パターン認識"
+      ],
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-001",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "トレンド相場での成績",
+      "research_question": "方向性のある局面での優位性",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-002",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "レンジ相場での成績",
+      "research_question": "方向性が乏しい局面での優位性",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-003",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "高変動相場での成績",
+      "research_question": "高ATR・高実現分散での損益",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-004",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "低変動相場での成績",
+      "research_question": "低ボラ時の損益",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-005",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "転換点付近の成績",
+      "research_question": "相場構造変化直後の取引",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-006",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "トレンド強度別成績",
+      "research_question": "ADXなどによる強度分類",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-007",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "急騰急落時の成績",
+      "research_question": "ジャンプ事象前後の成績",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-008",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "ボラティリティ急拡大",
+      "research_question": "局所的変動率ショック",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-009",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "価格ギャップの影響",
+      "research_question": "連続価格経路を仮定できない損失",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-010",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "流動性低下時の成績",
+      "research_question": "スプレッド・板厚の変化",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-011",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "レジーム遷移の影響",
+      "research_question": "市場状態間移行での戦略脆弱性",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D13-012",
+      "category_id": "D13",
+      "category": "相場レジーム・環境",
+      "metric": "NO_TRADE条件",
+      "research_question": "どの環境なら売買を見送るべきか",
+      "academic_disciplines": [
+        "非定常時系列",
+        "レジームスイッチング"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-001",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "スプレッド負担",
+      "research_question": "買値と売値の差による損益劣化",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-002",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "取引手数料率",
+      "research_question": "取引規模に対する明示費用",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-003",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "スリッページ",
+      "research_question": "発注基準値と約定値の差",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-004",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "発注から約定までの遅延",
+      "research_question": "執行待ちによる価格変化",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-005",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "成行・指値・逆指値別効果",
+      "research_question": "注文方法ごとの費用と約定差",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-006",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "約定率",
+      "research_question": "注文が約定に至る割合",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-007",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "部分約定率",
+      "research_question": "注文の一部のみ約定する割合",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-008",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "注文取消・変更頻度",
+      "research_question": "発注後に方針を変える頻度",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-009",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "Implementation Shortfall",
+      "research_question": "判断基準価格と執行価格・未約定の差",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-010",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "約定後の逆行（Adverse Selection）",
+      "research_question": "執行直後の不利な価格変動",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-011",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "Market Impact",
+      "research_question": "注文規模が市場価格に与えた影響",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-012",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "資金調達費・金利調整",
+      "research_question": "保有に伴う費用",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D14-013",
+      "category_id": "D14",
+      "category": "約定品質・コスト",
+      "metric": "費用控除前後の期待値",
+      "research_question": "コストで優位性が消えるか",
+      "academic_disciplines": [
+        "市場マイクロストラクチャー",
+        "最適執行"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-001",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "同時保有ポジション数",
+      "research_question": "複数の建玉を抱える頻度",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-002",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "総エクスポージャー",
+      "research_question": "絶対ポジション量の合計",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-003",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "ネットエクスポージャー",
+      "research_question": "方向相殺後のリスク",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-004",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "銘柄間相関",
+      "research_question": "資産同士の同時値動き",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-005",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "相関ポジション重複",
+      "research_question": "見かけの分散と実質集中",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-006",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "限界リスク寄与",
+      "research_question": "新しい建玉が追加するリスク",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-007",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "ヘッジ効果",
+      "research_question": "逆方向ポジションの損失緩和",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-008",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "共通ファクター露出",
+      "research_question": "金利・株価・為替等への依存",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-009",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "同時大損失頻度",
+      "research_question": "テールイベントでの共同損失",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-010",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "ポートフォリオPF・DD",
+      "research_question": "総合成績と単体成績の違い",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D15-011",
+      "category_id": "D15",
+      "category": "複数ポジション・資産配分",
+      "metric": "資産配分の偏り",
+      "research_question": "特定市場にリスクが集中するか",
+      "academic_disciplines": [
+        "ポートフォリオ理論",
+        "相関・テール依存"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-001",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "最大連勝・連敗",
+      "research_question": "続いた勝敗系列の極値",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-002",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "平均連勝・連敗長",
+      "research_question": "勝敗がまとまる程度",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-003",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "勝利後の次回勝率",
+      "research_question": "勝利条件付きの次の勝敗",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-004",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "敗北後の次回勝率",
+      "research_question": "損失条件付きの次の勝敗",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-005",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "勝敗の自己相関",
+      "research_question": "独立性に対する系列依存",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-006",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "連敗後ロット変化",
+      "research_question": "損失系列とリスク選択の連動",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-007",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "連勝後ロット変化",
+      "research_question": "成功系列とリスク選択の連動",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-008",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "損失後の再エントリー時間",
+      "research_question": "負けから次の発注までの間隔",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-009",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "取引間隔別期待値",
+      "research_question": "短い間隔での成績悪化の有無",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-010",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "休止ルールの効果",
+      "research_question": "連敗後の停止を仮想的に導入",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-011",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "売買頻度の自己励起",
+      "research_question": "売買後ほど次の売買が増えるか",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D16-012",
+      "category_id": "D16",
+      "category": "連勝・連敗・売買連鎖",
+      "metric": "取引密度の急増",
+      "research_question": "短時間の取引集中エピソード",
+      "academic_disciplines": [
+        "マルコフモデル",
+        "点過程"
+      ],
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-001",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "損失回避仮説",
+      "research_question": "等価な利益・損失に対し反応が非対称か",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-002",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "ディスポジション効果",
+      "research_question": "含み益を確定し含み損を抱えやすいか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-003",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "アンカリング仮説",
+      "research_question": "建値・高安など基準値への固着",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-004",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "サンクコスト仮説",
+      "research_question": "既投入資金が継続判断に影響するか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-005",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "確証バイアス仮説",
+      "research_question": "予想に反する情報を無視していないか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-006",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "過信仮説",
+      "research_question": "成功後に適切な根拠なくリスクを拡大するか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-007",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "リベンジトレード仮説",
+      "research_question": "損失回復目的で短時間に追加売買",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-008",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "FOMO仮説",
+      "research_question": "急変動後の追随が計画外に増えるか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-009",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "ギャンブラーの誤謬仮説",
+      "research_question": "連敗で次は勝つと判断するか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-010",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "ホットハンド信念仮説",
+      "research_question": "連勝で主観的成功確率を上げるか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-011",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "直近性バイアス仮説",
+      "research_question": "直近の損益を過大視するか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-012",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "メンタルアカウンティング",
+      "research_question": "利益の出所でリスク選択を変えるか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-013",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "ブレークイーブン効果",
+      "research_question": "損失を回復するまでリスク選択が変わるか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-014",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "認知疲労仮説",
+      "research_question": "判断の累積でルール逸脱が増えるか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-015",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "計画逸脱",
+      "research_question": "当初ルールと異なる行為の頻度",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-016",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "後知恵バイアス",
+      "research_question": "事後説明と事前予測に齟齬があるか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D17-017",
+      "category_id": "D17",
+      "category": "認知バイアスの行動指標",
+      "metric": "過剰取引仮説",
+      "research_question": "頻度増加が純期待値を下げるか",
+      "academic_disciplines": [
+        "行動経済学",
+        "認知心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-001",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "主要経済指標前後の取引",
+      "research_question": "発表時刻と取引の距離",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-002",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "金融政策イベントでの成績",
+      "research_question": "会合・会見等の影響",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-003",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "指標サプライズとの関係",
+      "research_question": "事前予想と実績の差の影響",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-004",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "突発ニュース後の取引",
+      "research_question": "速報への反応と取引結果",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-005",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "市場センチメント別成績",
+      "research_question": "リスク選好局面での損益",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-006",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "金利・為替連動",
+      "research_question": "他市場の変化による結果",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-007",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "国際市場の連動",
+      "research_question": "東京・ロンドン・NYの順行/逆行",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-008",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "先物・現物価格差",
+      "research_question": "市場間情報伝播",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D18-009",
+      "category_id": "D18",
+      "category": "外部ニュース・マクロ要因",
+      "metric": "休日・非取引時間",
+      "research_question": "ギャップの影響",
+      "academic_disciplines": [
+        "マクロ計量経済",
+        "イベントスタディ"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-001",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "手法変更前後の勝率差",
+      "research_question": "勝率のレベル変化",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-002",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "手法変更前後の期待値差",
+      "research_question": "費用込み平均損益の変化",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-003",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "手法変更前後のPF差",
+      "research_question": "損益効率の変化",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-004",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "損失尾部の変化",
+      "research_question": "大損失率が変化したか",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-005",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "保有時間の変化",
+      "research_question": "売買スタイルが変わったか",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-006",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "時間帯・銘柄構成の変化",
+      "research_question": "構成変化で見かけの改善が起きていないか",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-007",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "取引量変化",
+      "research_question": "ロット違いを標準化した成績",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-008",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "学習曲線",
+      "research_question": "経験とともに改善したか",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-009",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "構造変化点の検出",
+      "research_question": "変化した時点がいつか",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-010",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "ローリング期待値",
+      "research_question": "成績の安定性",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-011",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "非定常性",
+      "research_question": "過去の優位性が持続するか",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D19-012",
+      "category_id": "D19",
+      "category": "手法変更・学習効果",
+      "metric": "変更の純効果",
+      "research_question": "交絡調整後にも成績改善が残るか",
+      "academic_disciplines": [
+        "因果推論",
+        "構造変化"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-001",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "参入5分遅延",
+      "research_question": "参入を待った場合の費用込み損益",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-002",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "参入5分前倒し",
+      "research_question": "早期参入した場合の損益",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-003",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "決済5分前倒し",
+      "research_question": "早期撤退した場合の損益",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-004",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "決済15分延長",
+      "research_question": "保持を続けた場合の損益",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-005",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "固定利確導入",
+      "research_question": "事前目標で機械決済した場合",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-006",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "固定損切り導入",
+      "research_question": "事前ストップで損失限定した場合",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-007",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "ATRストップ導入",
+      "research_question": "ボラティリティ適応型ストップ",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-008",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "トレーリング導入",
+      "research_question": "利益を追跡するストップ",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-009",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "時間決済導入",
+      "research_question": "所定時間で退出した場合",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-010",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "連敗後休止",
+      "research_question": "連敗状態で見送った場合",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-011",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "特定時間帯の除外",
+      "research_question": "苦手時間を省いた場合",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-012",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "特定銘柄の除外",
+      "research_question": "苦手商品を省いた場合",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-013",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "勝ち建玉の延長",
+      "research_question": "利益拡大候補のみ継続",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-014",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "ナンピン禁止",
+      "research_question": "追加建てを禁止した場合",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-015",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "ロット固定化",
+      "research_question": "方向判断とサイズ判断を分離",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D20-016",
+      "category_id": "D20",
+      "category": "反実仮想・決済シミュレーション",
+      "metric": "非取引選択",
+      "research_question": "NO_TRADEを選んだ場合の代替成果",
+      "academic_disciplines": [
+        "因果推論",
+        "動的計画"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-001",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "勝率の信頼区間",
+      "research_question": "標本誤差の幅",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-002",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "期待値の信頼区間",
+      "research_question": "平均損益の推定不確実性",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-003",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "期待値ゼロ仮説検定",
+      "research_question": "観測利得が偶然の範囲か",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-004",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "ブートストラップ",
+      "research_question": "再標本化による頑健性",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-005",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "ブロックブートストラップ",
+      "research_question": "系列依存を考慮した再標本化",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-006",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "ベイズ事後分布",
+      "research_question": "成功確率などの不確実性",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-007",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "実効サンプルサイズ",
+      "research_question": "重複・依存を考慮した検出力",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-008",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "多重比較補正",
+      "research_question": "多数の条件探索による偽発見抑制",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-009",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "交互作用効果",
+      "research_question": "銘柄×時間帯などの組み合わせ",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-010",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "交絡因子調整",
+      "research_question": "見かけの関連を分離",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-011",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "ロジスティック回帰",
+      "research_question": "勝敗確率の条件付き関連",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-012",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "分位点回帰",
+      "research_question": "典型値ではなく尾部の説明",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-013",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "クラスタリング",
+      "research_question": "類似した取引タイプの識別",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-014",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "特徴量重要度",
+      "research_question": "予測で寄与する特徴の探索",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-015",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "期間外検証",
+      "research_question": "ルール選択に使わない未来期間で評価",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-016",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "Walk-forward",
+      "research_question": "時間順の繰り返し評価",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-017",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "リーケージ監査",
+      "research_question": "判断時に利用不能な情報の排除",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-018",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "Deflated Sharpe Ratio",
+      "research_question": "多重試行・非正規性による評価の調整",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-019",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "パラメータ感度",
+      "research_question": "閾値変更に対する脆弱性",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D21-020",
+      "category_id": "D21",
+      "category": "統計的信頼性・再現性",
+      "metric": "モンテカルロ",
+      "research_question": "仮定した損益過程の結果分布",
+      "academic_disciplines": [
+        "推測統計",
+        "機械学習"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-001",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "ルール遵守率",
+      "research_question": "事前手法に沿う売買の割合",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-002",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "ストップ変更率",
+      "research_question": "損切り指値を不利な方向へずらす頻度",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-003",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "サイズ制限違反",
+      "research_question": "許容ロットを超える頻度",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-004",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "証拠金余力違反",
+      "research_question": "余力フロアの逸脱",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-005",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "強制決済発生率",
+      "research_question": "余力不足などの強制ロスカット",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-006",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "誤発注率",
+      "research_question": "方向・数量・価格の入力ミス",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-007",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "システム障害損失",
+      "research_question": "通信・約定障害に関連する損失",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-008",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "計画外売買の成績",
+      "research_question": "想定外の判断の期待値",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-009",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "停止ルール遵守",
+      "research_question": "日次・連敗停止の実効性",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "D22-010",
+      "category_id": "D22",
+      "category": "規律・業務上のリスク",
+      "metric": "予防可能損失",
+      "research_question": "決定済みルール遵守なら回避した損失",
+      "academic_disciplines": [
+        "ヒューマンファクター",
+        "リスク統制"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": false
+    },
+    {
+      "id": "P01-001",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "状況限定のリスク選好",
+      "research_question": "市場内で大きなリスクを選びやすいか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-002",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "慎重さ",
+      "research_question": "参入前の確認条件を厳格にするか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-003",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "衝動性",
+      "research_question": "計画外の即時参入が多いか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-004",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "自己規律",
+      "research_question": "繰り返しルールを守るか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-005",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "忍耐的な保有",
+      "research_question": "戦略条件を満たすまで保有できるか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-006",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "判断の一貫性",
+      "research_question": "同じ状況で同じ行動か",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-007",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "柔軟性",
+      "research_question": "市場環境の変化に適応するか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-008",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "完璧主義傾向",
+      "research_question": "過度な確認が結果を損なうか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-009",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "達成志向",
+      "research_question": "目標設定と行動の一貫性",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-010",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "刺激追求仮説",
+      "research_question": "高変動局面を嗜好するか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-011",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "曖昧さ耐性",
+      "research_question": "不明瞭な相場で判断がどう変化するか",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-012",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "自己効力感",
+      "research_question": "成功後の見積もり精度の変化",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-013",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "過信傾向",
+      "research_question": "主観的確率と実際の的中の不一致",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-014",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "感情的反応性",
+      "research_question": "大損益後の行動変化",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-015",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "Big Five誠実性",
+      "research_question": "取引規律との関連仮説※尺度が必要",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-016",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "Big Five開放性",
+      "research_question": "新戦略探索との関連仮説※尺度が必要",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P01-017",
+      "category_id": "P01",
+      "category": "パーソナリティ関連仮説",
+      "metric": "Big Five外向性・協調性",
+      "research_question": "取引単独では測定根拠に乏しい",
+      "academic_disciplines": [
+        "特性心理学",
+        "行動経済学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-001",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "直感型・熟慮型",
+      "research_question": "即応と分析プロセスをどう使い分けるか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-002",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "トップダウン型",
+      "research_question": "上位市場状況を先に確認するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-003",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "ボトムアップ型",
+      "research_question": "直近価格の変化から判断するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-004",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "パターン認識型",
+      "research_question": "類似価格形状に反応するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-005",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "確率思考型",
+      "research_question": "期待値と損失分布を意思決定に使うか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-006",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "二分法的判断",
+      "research_question": "方向判断が過度に固定化するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-007",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "仮説検証型",
+      "research_question": "小規模に試し統計的評価を行うか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-008",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "探索型",
+      "research_question": "商品や時間帯の実験が多いか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-009",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "最適化志向",
+      "research_question": "失敗後にルールを系統的に改めるか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-010",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "反応型",
+      "research_question": "ニュースや値動きへの即応が多いか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-011",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "予測先行型",
+      "research_question": "値動き確認前にポジションを持つか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-012",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "確認重視型",
+      "research_question": "複数指標の成立まで待つか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-013",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "損失最小化志向",
+      "research_question": "リターンより損失制御を優先するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-014",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "機会最大化志向",
+      "research_question": "シグナル機会の最大化を優先するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-015",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "状況適応型",
+      "research_question": "相場に応じて手法を変更するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P02-016",
+      "category_id": "P02",
+      "category": "思考・認知スタイル",
+      "metric": "固定ルール型",
+      "research_question": "再現可能なトリガーを重視するか",
+      "academic_disciplines": [
+        "認知科学",
+        "意思決定心理学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-001",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "定時売買習慣",
+      "research_question": "同じ時刻に取引するか",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-002",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "反射的な参入",
+      "research_question": "急変動直後の短時間反応",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-003",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "決済直後再参入",
+      "research_question": "決済と次の注文の時間差",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-004",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "ナンピン習慣",
+      "research_question": "逆行中に追加建てする反復",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-005",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "ロット増額習慣",
+      "research_question": "勝敗系列でサイズが変化",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-006",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "早期利確習慣",
+      "research_question": "小さな含み益を確定する反復",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-007",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "損切り延期習慣",
+      "research_question": "ストップを繰り返し変更",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-008",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "見送り困難仮説",
+      "research_question": "条件不足での取引頻度",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-009",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "確認の反復",
+      "research_question": "発注後の変更・取消頻度",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-010",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "同方向の惰性",
+      "research_question": "同じ方向の連続売買",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-011",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "判断の一貫性",
+      "research_question": "類似条件での反応パターン",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-012",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "改善後の維持率",
+      "research_question": "修正行動が継続するか",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-013",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "利益目標後の継続",
+      "research_question": "日次目標達成後に取引するか",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P03-014",
+      "category_id": "P03",
+      "category": "習慣・反復行動",
+      "metric": "計画外行動率",
+      "research_question": "事前ルールからの逸脱",
+      "academic_disciplines": [
+        "習慣形成",
+        "行動学習"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-001",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "損失後の反応変化",
+      "research_question": "損失後のサイズ・頻度変化",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-002",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "利益後の反応変化",
+      "research_question": "大勝ち後のリスク選択",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-003",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "大損益局面のルール遵守",
+      "research_question": "圧力下で行動が変わるか",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-004",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "不確実性への反応",
+      "research_question": "レンジ・乱高下で行動が変化",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-005",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "小さな逆行への反応",
+      "research_question": "微損での撤退頻度",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-006",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "利益期待による延長",
+      "research_question": "利確条件に達しても保有するか",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-007",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "取引行動の回復時間",
+      "research_question": "大きな損失後に通常の行動に戻る時間",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-008",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "判断の硬直",
+      "research_question": "市場が反転しても方針を変更できないか",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-009",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "安全確保行動",
+      "research_question": "過度な建値撤退や即時利確",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P04-010",
+      "category_id": "P04",
+      "category": "情動・ストレス反応の仮説",
+      "metric": "連続判断後の品質変化",
+      "research_question": "長時間取引後に逸脱が増えるか",
+      "academic_disciplines": [
+        "感情調整",
+        "ストレス心理学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-001",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "トレンド認識の技能",
+      "research_question": "トレンド開始・継続時の方向精度",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-002",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "反転認識の技能",
+      "research_question": "転換点付近の方向判断",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-003",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "参入タイミング技能",
+      "research_question": "参入後の逆行と順行",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-004",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "リスク管理技能",
+      "research_question": "初期損失限定・余力維持",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-005",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "利益伸長技能",
+      "research_question": "高MFE捕捉率を維持するか",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-006",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "損失限定技能",
+      "research_question": "大損失の尾部を制御するか",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-007",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "相場適応技能",
+      "research_question": "市場状態変化への対応",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-008",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "統計的思考技能",
+      "research_question": "期待値と検証記録の利用",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-009",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "パターン学習技能",
+      "research_question": "類似の失敗が減るか",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-010",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "ミス修正技能",
+      "research_question": "違反行動の反復が減るか",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-011",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "選択的注意技能",
+      "research_question": "重要シグナルの取り逃し",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-012",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "反応速度",
+      "research_question": "条件成立から発注までの所要時間",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-013",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "戦略遂行技能",
+      "research_question": "意図したルールの実装精度",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-014",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "非対称損益の活用",
+      "research_question": "小損大利を実現するか",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-015",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "自己改善技能",
+      "research_question": "検証・修正後の改善維持",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P05-016",
+      "category_id": "P05",
+      "category": "得意分野・技能の仮説",
+      "metric": "複合情報統合",
+      "research_question": "複数条件を一貫して判断するか",
+      "academic_disciplines": [
+        "熟達研究",
+        "学習科学"
+      ],
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-001",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "報酬処理",
+      "research_question": "利益後の行動と報酬学習モデルの対応",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-002",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "損失・脅威処理",
+      "research_question": "損失後行動と情動モデルの対応",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-003",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "抑制制御",
+      "research_question": "シグナル不足での見送り行動",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-004",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "認知的柔軟性",
+      "research_question": "方針転換の行動上の速度",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-005",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "ワーキングメモリ",
+      "research_question": "複数条件の同時保持※直接推定不可",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-006",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "注意制御",
+      "research_question": "重要情報への選択的反応※直接推定不可",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-007",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "予測誤差学習",
+      "research_question": "予想外の結果で次の判断が変わるか",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-008",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "不確実性処理",
+      "research_question": "曖昧な状況での選択変化",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-009",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "時間割引",
+      "research_question": "将来大益と現在小益の選好※選択課題が必要",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-010",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "習慣的・目標志向的制御",
+      "research_question": "反復反応と柔軟反応の比較",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-011",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "疲労と情報処理",
+      "research_question": "連続売買時の行動変化",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-012",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "神経発達特性",
+      "research_question": "診断や属性の推定は禁止",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-013",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "神経伝達物質",
+      "research_question": "ドーパミン等の状態推定は禁止",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P06-014",
+      "category_id": "P06",
+      "category": "神経科学的研究との接点",
+      "metric": "脳領域の活性・構造",
+      "research_question": "扁桃体・前頭前野等の状態推定は禁止",
+      "academic_disciplines": [
+        "神経経済学",
+        "計算論的神経科学"
+      ],
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-001",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "幼少期の経済的安定性",
+      "research_question": "現在のリスク選択との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-002",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "経済的困窮経験",
+      "research_question": "金銭的損失への反応との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-003",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "家庭環境の予測可能性",
+      "research_question": "不確実性への態度との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-004",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "家庭の金銭教育",
+      "research_question": "資金管理習慣との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-005",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "保護者のリスク選好",
+      "research_question": "社会的学習との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-006",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "失敗への教育経験",
+      "research_question": "損失後の学習方法との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-007",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "成功経験の蓄積",
+      "research_question": "自己効力感・過信との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-008",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "過去の重大な経済損失",
+      "research_question": "現在の安全志向との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-009",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "競争経験",
+      "research_question": "目標志向の形成との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-010",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "環境変化への適応経験",
+      "research_question": "変動相場への適応との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-011",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "教育・専門分野",
+      "research_question": "分析手法選択との関連※別途本人情報",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-012",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "職務経験・専門訓練",
+      "research_question": "ルール化・リスク管理技能との関連",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    },
+    {
+      "id": "P07-013",
+      "category_id": "P07",
+      "category": "生育環境・形成要因の研究",
+      "metric": "過去の投資成功・失敗",
+      "research_question": "現在の判断ルールの学習史",
+      "academic_disciplines": [
+        "発達心理",
+        "社会化",
+        "ライフコース研究"
+      ],
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable",
+      "not_a_personality_diagnosis": true
+    }
+  ],
+  "test_hypothesis_ids": [
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08",
+    "H09",
+    "H10",
+    "H11",
+    "H12"
+  ],
+  "required_output_fields": [
+    "task_type",
+    "as_of",
+    "known_facts",
+    "data_quality",
+    "metric_results",
+    "hypotheses",
+    "alternative_explanations",
+    "evidence_level",
+    "uncertainty",
+    "validation",
+    "remaining_unknowns",
+    "decision"
+  ]
+}

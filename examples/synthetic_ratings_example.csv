@@ -1,0 +1,3 @@
+dataset_id,metric_id,score_1_5,evidence_level,evidence_reference,rationale
+A,D01-009,4,L1,SYNTHETIC_EXAMPLE_ONLY:normalized_unique_trade_id_check,架空の品質採点例。原始約定の網羅性は未確認のため5点としない。
+A,D02-007,2,L1,SYNTHETIC_EXAMPLE_ONLY:hypothetical_process_review,期待値の検証プロセスに対する人手の仮評価例。損益額から得点を自動変換したものではない。

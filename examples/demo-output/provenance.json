@@ -1,0 +1,30 @@
+{
+  "schema": "evaluation-output-v1",
+  "datasets": [
+    {
+      "dataset_id": "A",
+      "paths": [
+        "synthetic_round_trips.csv"
+      ],
+      "n_trades": 64,
+      "base_currency": "JPY",
+      "time_range_utc": [
+        "2026-09-01T01:00:00+00:00",
+        "2026-10-02T04:38:00+00:00"
+      ],
+      "assumed_naive_timezone": "Asia/Tokyo",
+      "metric_count": 76,
+      "category_count": 29,
+      "count_numeric": 19,
+      "status": "RESEARCH_ONLY",
+      "reference_ideal": "QUANT-OMEGA; normative process benchmark, NOT observed returns",
+      "risks": [
+        "Naive timestamps (if any) interpreted in Asia/Tokyo; check DST and broker timezone."
+      ]
+    }
+  ],
+  "metric_source": "registry/metrics_full_379.json",
+  "ideal_source": "benchmark/quant-omega/ideal_model_full_379.json",
+  "public_repository_safe": false,
+  "notice": "Outputs may reveal private trade performance; never commit to public GitHub."
+}

@@ -1,0 +1,1611 @@
+{
+  "schema_version": "1.0",
+  "source_registry": "trade_history_metric_registry.json",
+  "source_registry_metric_count": 379,
+  "all_category_count": 29,
+  "lite_metric_count": 76,
+  "lite_share": 0.20053,
+  "research_status": "RESEARCH_ONLY",
+  "prioritization_method": "Compare integrity first, then actionable trade outcomes, behavioral patterns, and non-identifiable research boundaries.",
+  "category_priority_order": [
+    {
+      "priority": 1,
+      "category_id": "D01",
+      "name": "データ品質・取引構造",
+      "full_count": 11,
+      "lite_count": 3,
+      "reason": "全評価の前提。建玉対応・損益計算・欠損を検証"
+    },
+    {
+      "priority": 2,
+      "category_id": "D02",
+      "name": "基本成績・期待値",
+      "full_count": 14,
+      "lite_count": 4,
+      "reason": "成績の基準値と改善の主要アウトカムを測定"
+    },
+    {
+      "priority": 3,
+      "category_id": "D09",
+      "name": "決済・利確・損切り",
+      "full_count": 15,
+      "lite_count": 5,
+      "reason": "利益伸長と損失限定に最も直結する決済品質"
+    },
+    {
+      "priority": 4,
+      "category_id": "D04",
+      "name": "リスク・ドローダウン",
+      "full_count": 14,
+      "lite_count": 3,
+      "reason": "資金破綻と尾部損失を防ぐリスク管理"
+    },
+    {
+      "priority": 5,
+      "category_id": "D08",
+      "name": "エントリーの質",
+      "full_count": 13,
+      "lite_count": 4,
+      "reason": "エントリーの優位性を決済成績から切り離す"
+    },
+    {
+      "priority": 6,
+      "category_id": "D05",
+      "name": "ロット・資金管理",
+      "full_count": 12,
+      "lite_count": 3,
+      "reason": "ロットとリスク額の規律、損失上限を評価"
+    },
+    {
+      "priority": 7,
+      "category_id": "D10",
+      "name": "保有時間・時間効率",
+      "full_count": 12,
+      "lite_count": 3,
+      "reason": "利小損大と保有時間の関連を確認"
+    },
+    {
+      "priority": 8,
+      "category_id": "D19",
+      "name": "手法変更・学習効果",
+      "full_count": 12,
+      "lite_count": 3,
+      "reason": "手法変更の前後を混同せず効果を検証"
+    },
+    {
+      "priority": 9,
+      "category_id": "D21",
+      "name": "統計的信頼性・再現性",
+      "full_count": 20,
+      "lite_count": 3,
+      "reason": "偶然・過学習・未来情報混入を検出"
+    },
+    {
+      "priority": 10,
+      "category_id": "D11",
+      "name": "時間帯・曜日・カレンダー",
+      "full_count": 13,
+      "lite_count": 3,
+      "reason": "時間帯・曜日・市場時間の偏りを検証"
+    },
+    {
+      "priority": 11,
+      "category_id": "D06",
+      "name": "銘柄・商品別適性",
+      "full_count": 11,
+      "lite_count": 2,
+      "reason": "銘柄により損益が集中するかを確認"
+    },
+    {
+      "priority": 12,
+      "category_id": "D13",
+      "name": "相場レジーム・環境",
+      "full_count": 12,
+      "lite_count": 3,
+      "reason": "トレンド・変動率と戦略の相性"
+    },
+    {
+      "priority": 13,
+      "category_id": "D16",
+      "name": "連勝・連敗・売買連鎖",
+      "full_count": 12,
+      "lite_count": 3,
+      "reason": "連敗後の行動変化と過剰売買"
+    },
+    {
+      "priority": 14,
+      "category_id": "D22",
+      "name": "規律・業務上のリスク",
+      "full_count": 10,
+      "lite_count": 3,
+      "reason": "運用規律・停止ルールを監査"
+    },
+    {
+      "priority": 15,
+      "category_id": "P03",
+      "name": "習慣・反復行動",
+      "full_count": 14,
+      "lite_count": 3,
+      "reason": "習慣や反復行動を非診断的に記述"
+    },
+    {
+      "priority": 16,
+      "category_id": "D17",
+      "name": "認知バイアスの行動指標",
+      "full_count": 17,
+      "lite_count": 2,
+      "reason": "心理的な仮説と対立する説明を分離"
+    },
+    {
+      "priority": 17,
+      "category_id": "P02",
+      "name": "思考・認知スタイル",
+      "full_count": 16,
+      "lite_count": 2,
+      "reason": "意思決定スタイルの仮説を検証"
+    },
+    {
+      "priority": 18,
+      "category_id": "P05",
+      "name": "得意分野・技能の仮説",
+      "full_count": 16,
+      "lite_count": 2,
+      "reason": "強み・技能を結果と区別して評価"
+    },
+    {
+      "priority": 19,
+      "category_id": "P04",
+      "name": "情動・ストレス反応の仮説",
+      "full_count": 10,
+      "lite_count": 2,
+      "reason": "損益後の行動変化とストレス仮説"
+    },
+    {
+      "priority": 20,
+      "category_id": "P01",
+      "name": "パーソナリティ関連仮説",
+      "full_count": 17,
+      "lite_count": 2,
+      "reason": "性格断定を避けつつ状況限定の傾向を探索"
+    },
+    {
+      "priority": 21,
+      "category_id": "D20",
+      "name": "反実仮想・決済シミュレーション",
+      "full_count": 16,
+      "lite_count": 2,
+      "reason": "実行可能性を考慮した反実仮想"
+    },
+    {
+      "priority": 22,
+      "category_id": "D14",
+      "name": "約定品質・コスト",
+      "full_count": 13,
+      "lite_count": 2,
+      "reason": "スリッページ・コストで優位性が消えないか"
+    },
+    {
+      "priority": 23,
+      "category_id": "D03",
+      "name": "損益分布・極端値",
+      "full_count": 11,
+      "lite_count": 2,
+      "reason": "損失の尾部と利益集中に着目"
+    },
+    {
+      "priority": 24,
+      "category_id": "D07",
+      "name": "ロング・ショート適性",
+      "full_count": 8,
+      "lite_count": 2,
+      "reason": "売買方向に依存する損益非対称性"
+    },
+    {
+      "priority": 25,
+      "category_id": "D12",
+      "name": "テクニカル・価格パターン",
+      "full_count": 13,
+      "lite_count": 2,
+      "reason": "価格指標との整合性を反証可能に確認"
+    },
+    {
+      "priority": 26,
+      "category_id": "D15",
+      "name": "複数ポジション・資産配分",
+      "full_count": 11,
+      "lite_count": 2,
+      "reason": "複数建玉の共倒れを検証"
+    },
+    {
+      "priority": 27,
+      "category_id": "D18",
+      "name": "外部ニュース・マクロ要因",
+      "full_count": 9,
+      "lite_count": 2,
+      "reason": "経済イベント・国際市場の影響を検証"
+    },
+    {
+      "priority": 28,
+      "category_id": "P06",
+      "name": "神経科学的研究との接点",
+      "full_count": 14,
+      "lite_count": 2,
+      "reason": "神経機能の研究との接点。売買履歴から脳特性を特定しない"
+    },
+    {
+      "priority": 29,
+      "category_id": "P07",
+      "name": "生育環境・形成要因の研究",
+      "full_count": 13,
+      "lite_count": 2,
+      "reason": "生育歴の研究との接点。本人の任意報告がない限り推定しない"
+    }
+  ],
+  "lite_metric_ids": [
+    "D01-002",
+    "D01-008",
+    "D01-009",
+    "D02-001",
+    "D02-003",
+    "D02-006",
+    "D02-007",
+    "D09-003",
+    "D09-004",
+    "D09-005",
+    "D09-007",
+    "D09-008",
+    "D04-001",
+    "D04-012",
+    "D04-014",
+    "D08-001",
+    "D08-002",
+    "D08-010",
+    "D08-012",
+    "D05-003",
+    "D05-006",
+    "D05-012",
+    "D10-002",
+    "D10-003",
+    "D10-005",
+    "D19-002",
+    "D19-004",
+    "D19-006",
+    "D21-002",
+    "D21-015",
+    "D21-017",
+    "D11-002",
+    "D11-003",
+    "D11-007",
+    "D06-003",
+    "D06-010",
+    "D13-001",
+    "D13-003",
+    "D13-012",
+    "D16-006",
+    "D16-008",
+    "D16-009",
+    "D22-001",
+    "D22-002",
+    "D22-009",
+    "P03-003",
+    "P03-006",
+    "P03-007",
+    "D17-002",
+    "D17-007",
+    "P02-005",
+    "P02-015",
+    "P05-003",
+    "P05-015",
+    "P04-001",
+    "P04-003",
+    "P01-001",
+    "P01-004",
+    "D20-006",
+    "D20-008",
+    "D14-003",
+    "D14-013",
+    "D03-004",
+    "D03-008",
+    "D07-003",
+    "D07-004",
+    "D12-001",
+    "D12-011",
+    "D15-005",
+    "D15-009",
+    "D18-001",
+    "D18-007",
+    "P06-003",
+    "P06-007",
+    "P07-004",
+    "P07-013"
+  ],
+  "full_metric_ids": [
+    "D01-002",
+    "D01-008",
+    "D01-009",
+    "D01-001",
+    "D01-003",
+    "D01-004",
+    "D01-005",
+    "D01-006",
+    "D01-007",
+    "D01-010",
+    "D01-011",
+    "D02-001",
+    "D02-003",
+    "D02-006",
+    "D02-007",
+    "D02-002",
+    "D02-004",
+    "D02-005",
+    "D02-008",
+    "D02-009",
+    "D02-010",
+    "D02-011",
+    "D02-012",
+    "D02-013",
+    "D02-014",
+    "D09-003",
+    "D09-004",
+    "D09-005",
+    "D09-007",
+    "D09-008",
+    "D09-001",
+    "D09-002",
+    "D09-006",
+    "D09-009",
+    "D09-010",
+    "D09-011",
+    "D09-012",
+    "D09-013",
+    "D09-014",
+    "D09-015",
+    "D04-001",
+    "D04-012",
+    "D04-014",
+    "D04-002",
+    "D04-003",
+    "D04-004",
+    "D04-005",
+    "D04-006",
+    "D04-007",
+    "D04-008",
+    "D04-009",
+    "D04-010",
+    "D04-011",
+    "D04-013",
+    "D08-001",
+    "D08-002",
+    "D08-010",
+    "D08-012",
+    "D08-003",
+    "D08-004",
+    "D08-005",
+    "D08-006",
+    "D08-007",
+    "D08-008",
+    "D08-009",
+    "D08-011",
+    "D08-013",
+    "D05-003",
+    "D05-006",
+    "D05-012",
+    "D05-001",
+    "D05-002",
+    "D05-004",
+    "D05-005",
+    "D05-007",
+    "D05-008",
+    "D05-009",
+    "D05-010",
+    "D05-011",
+    "D10-002",
+    "D10-003",
+    "D10-005",
+    "D10-001",
+    "D10-004",
+    "D10-006",
+    "D10-007",
+    "D10-008",
+    "D10-009",
+    "D10-010",
+    "D10-011",
+    "D10-012",
+    "D19-002",
+    "D19-004",
+    "D19-006",
+    "D19-001",
+    "D19-003",
+    "D19-005",
+    "D19-007",
+    "D19-008",
+    "D19-009",
+    "D19-010",
+    "D19-011",
+    "D19-012",
+    "D21-002",
+    "D21-015",
+    "D21-017",
+    "D21-001",
+    "D21-003",
+    "D21-004",
+    "D21-005",
+    "D21-006",
+    "D21-007",
+    "D21-008",
+    "D21-009",
+    "D21-010",
+    "D21-011",
+    "D21-012",
+    "D21-013",
+    "D21-014",
+    "D21-016",
+    "D21-018",
+    "D21-019",
+    "D21-020",
+    "D11-002",
+    "D11-003",
+    "D11-007",
+    "D11-001",
+    "D11-004",
+    "D11-005",
+    "D11-006",
+    "D11-008",
+    "D11-009",
+    "D11-010",
+    "D11-011",
+    "D11-012",
+    "D11-013",
+    "D06-003",
+    "D06-010",
+    "D06-001",
+    "D06-002",
+    "D06-004",
+    "D06-005",
+    "D06-006",
+    "D06-007",
+    "D06-008",
+    "D06-009",
+    "D06-011",
+    "D13-001",
+    "D13-003",
+    "D13-012",
+    "D13-002",
+    "D13-004",
+    "D13-005",
+    "D13-006",
+    "D13-007",
+    "D13-008",
+    "D13-009",
+    "D13-010",
+    "D13-011",
+    "D16-006",
+    "D16-008",
+    "D16-009",
+    "D16-001",
+    "D16-002",
+    "D16-003",
+    "D16-004",
+    "D16-005",
+    "D16-007",
+    "D16-010",
+    "D16-011",
+    "D16-012",
+    "D22-001",
+    "D22-002",
+    "D22-009",
+    "D22-003",
+    "D22-004",
+    "D22-005",
+    "D22-006",
+    "D22-007",
+    "D22-008",
+    "D22-010",
+    "P03-003",
+    "P03-006",
+    "P03-007",
+    "P03-001",
+    "P03-002",
+    "P03-004",
+    "P03-005",
+    "P03-008",
+    "P03-009",
+    "P03-010",
+    "P03-011",
+    "P03-012",
+    "P03-013",
+    "P03-014",
+    "D17-002",
+    "D17-007",
+    "D17-001",
+    "D17-003",
+    "D17-004",
+    "D17-005",
+    "D17-006",
+    "D17-008",
+    "D17-009",
+    "D17-010",
+    "D17-011",
+    "D17-012",
+    "D17-013",
+    "D17-014",
+    "D17-015",
+    "D17-016",
+    "D17-017",
+    "P02-005",
+    "P02-015",
+    "P02-001",
+    "P02-002",
+    "P02-003",
+    "P02-004",
+    "P02-006",
+    "P02-007",
+    "P02-008",
+    "P02-009",
+    "P02-010",
+    "P02-011",
+    "P02-012",
+    "P02-013",
+    "P02-014",
+    "P02-016",
+    "P05-003",
+    "P05-015",
+    "P05-001",
+    "P05-002",
+    "P05-004",
+    "P05-005",
+    "P05-006",
+    "P05-007",
+    "P05-008",
+    "P05-009",
+    "P05-010",
+    "P05-011",
+    "P05-012",
+    "P05-013",
+    "P05-014",
+    "P05-016",
+    "P04-001",
+    "P04-003",
+    "P04-002",
+    "P04-004",
+    "P04-005",
+    "P04-006",
+    "P04-007",
+    "P04-008",
+    "P04-009",
+    "P04-010",
+    "P01-001",
+    "P01-004",
+    "P01-002",
+    "P01-003",
+    "P01-005",
+    "P01-006",
+    "P01-007",
+    "P01-008",
+    "P01-009",
+    "P01-010",
+    "P01-011",
+    "P01-012",
+    "P01-013",
+    "P01-014",
+    "P01-015",
+    "P01-016",
+    "P01-017",
+    "D20-006",
+    "D20-008",
+    "D20-001",
+    "D20-002",
+    "D20-003",
+    "D20-004",
+    "D20-005",
+    "D20-007",
+    "D20-009",
+    "D20-010",
+    "D20-011",
+    "D20-012",
+    "D20-013",
+    "D20-014",
+    "D20-015",
+    "D20-016",
+    "D14-003",
+    "D14-013",
+    "D14-001",
+    "D14-002",
+    "D14-004",
+    "D14-005",
+    "D14-006",
+    "D14-007",
+    "D14-008",
+    "D14-009",
+    "D14-010",
+    "D14-011",
+    "D14-012",
+    "D03-004",
+    "D03-008",
+    "D03-001",
+    "D03-002",
+    "D03-003",
+    "D03-005",
+    "D03-006",
+    "D03-007",
+    "D03-009",
+    "D03-010",
+    "D03-011",
+    "D07-003",
+    "D07-004",
+    "D07-001",
+    "D07-002",
+    "D07-005",
+    "D07-006",
+    "D07-007",
+    "D07-008",
+    "D12-001",
+    "D12-011",
+    "D12-002",
+    "D12-003",
+    "D12-004",
+    "D12-005",
+    "D12-006",
+    "D12-007",
+    "D12-008",
+    "D12-009",
+    "D12-010",
+    "D12-012",
+    "D12-013",
+    "D15-005",
+    "D15-009",
+    "D15-001",
+    "D15-002",
+    "D15-003",
+    "D15-004",
+    "D15-006",
+    "D15-007",
+    "D15-008",
+    "D15-010",
+    "D15-011",
+    "D18-001",
+    "D18-007",
+    "D18-002",
+    "D18-003",
+    "D18-004",
+    "D18-005",
+    "D18-006",
+    "D18-008",
+    "D18-009",
+    "P06-003",
+    "P06-007",
+    "P06-001",
+    "P06-002",
+    "P06-004",
+    "P06-005",
+    "P06-006",
+    "P06-008",
+    "P06-009",
+    "P06-010",
+    "P06-011",
+    "P06-012",
+    "P06-013",
+    "P06-014",
+    "P07-004",
+    "P07-013",
+    "P07-001",
+    "P07-002",
+    "P07-003",
+    "P07-005",
+    "P07-006",
+    "P07-007",
+    "P07-008",
+    "P07-009",
+    "P07-010",
+    "P07-011",
+    "P07-012"
+  ],
+  "lite_selection": [
+    {
+      "rank": 1,
+      "id": "D01-002",
+      "category_id": "D01",
+      "metric": "ポジション再構成",
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 2,
+      "id": "D01-008",
+      "category_id": "D01",
+      "metric": "損益計算の照合",
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 3,
+      "id": "D01-009",
+      "category_id": "D01",
+      "metric": "欠損・重複・異常値",
+      "required_data": [
+        "H",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 12,
+      "id": "D02-001",
+      "category_id": "D02",
+      "metric": "総損益・純損益",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 13,
+      "id": "D02-003",
+      "category_id": "D02",
+      "metric": "勝率・敗率・建値率",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 14,
+      "id": "D02-006",
+      "category_id": "D02",
+      "metric": "プロフィットファクター",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 15,
+      "id": "D02-007",
+      "category_id": "D02",
+      "metric": "期待損益",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 26,
+      "id": "D09-003",
+      "category_id": "D09",
+      "metric": "MFE",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 27,
+      "id": "D09-004",
+      "category_id": "D09",
+      "metric": "MAE",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 28,
+      "id": "D09-005",
+      "category_id": "D09",
+      "metric": "MFE捕捉率",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 29,
+      "id": "D09-007",
+      "category_id": "D09",
+      "metric": "初期ストップ逸脱",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 30,
+      "id": "D09-008",
+      "category_id": "D09",
+      "metric": "早すぎる利確仮説",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 41,
+      "id": "D04-001",
+      "category_id": "D04",
+      "metric": "最大ドローダウン",
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 42,
+      "id": "D04-012",
+      "category_id": "D04",
+      "metric": "日次損失集中度",
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 43,
+      "id": "D04-014",
+      "category_id": "D04",
+      "metric": "含み損益由来DD",
+      "required_data": [
+        "H",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 55,
+      "id": "D08-001",
+      "category_id": "D08",
+      "metric": "エントリー直後リターン",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 56,
+      "id": "D08-002",
+      "category_id": "D08",
+      "metric": "直後逆行率",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 57,
+      "id": "D08-010",
+      "category_id": "D08",
+      "metric": "参入後最大逆行",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 58,
+      "id": "D08-012",
+      "category_id": "D08",
+      "metric": "失敗パターンの再現性",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 68,
+      "id": "D05-003",
+      "category_id": "D05",
+      "metric": "リスク資産比率",
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 69,
+      "id": "D05-006",
+      "category_id": "D05",
+      "metric": "R-Multiple",
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 70,
+      "id": "D05-012",
+      "category_id": "D05",
+      "metric": "損失上限違反",
+      "required_data": [
+        "H",
+        "O",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 80,
+      "id": "D10-002",
+      "category_id": "D10",
+      "metric": "勝ち取引保有時間",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 81,
+      "id": "D10-003",
+      "category_id": "D10",
+      "metric": "負け取引保有時間",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 82,
+      "id": "D10-005",
+      "category_id": "D10",
+      "metric": "保有時間別期待値",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 92,
+      "id": "D19-002",
+      "category_id": "D19",
+      "metric": "手法変更前後の期待値差",
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 93,
+      "id": "D19-004",
+      "category_id": "D19",
+      "metric": "損失尾部の変化",
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 94,
+      "id": "D19-006",
+      "category_id": "D19",
+      "metric": "時間帯・銘柄構成の変化",
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 104,
+      "id": "D21-002",
+      "category_id": "D21",
+      "metric": "期待値の信頼区間",
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference"
+    },
+    {
+      "rank": 105,
+      "id": "D21-015",
+      "category_id": "D21",
+      "metric": "期間外検証",
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference"
+    },
+    {
+      "rank": 106,
+      "id": "D21-017",
+      "category_id": "D21",
+      "metric": "リーケージ監査",
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "inference"
+    },
+    {
+      "rank": 124,
+      "id": "D11-002",
+      "category_id": "D11",
+      "metric": "時間帯別期待値",
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 125,
+      "id": "D11-003",
+      "category_id": "D11",
+      "metric": "曜日別勝率",
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 126,
+      "id": "D11-007",
+      "category_id": "D11",
+      "metric": "市場セッション別成績",
+      "required_data": [
+        "H",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 137,
+      "id": "D06-003",
+      "category_id": "D06",
+      "metric": "銘柄別期待値",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 138,
+      "id": "D06-010",
+      "category_id": "D06",
+      "metric": "銘柄別大損失寄与度",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 148,
+      "id": "D13-001",
+      "category_id": "D13",
+      "metric": "トレンド相場での成績",
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 149,
+      "id": "D13-003",
+      "category_id": "D13",
+      "metric": "高変動相場での成績",
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 150,
+      "id": "D13-012",
+      "category_id": "D13",
+      "metric": "NO_TRADE条件",
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 160,
+      "id": "D16-006",
+      "category_id": "D16",
+      "metric": "連敗後ロット変化",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 161,
+      "id": "D16-008",
+      "category_id": "D16",
+      "metric": "損失後の再エントリー時間",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 162,
+      "id": "D16-009",
+      "category_id": "D16",
+      "metric": "取引間隔別期待値",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 172,
+      "id": "D22-001",
+      "category_id": "D22",
+      "metric": "ルール遵守率",
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 173,
+      "id": "D22-002",
+      "category_id": "D22",
+      "metric": "ストップ変更率",
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 174,
+      "id": "D22-009",
+      "category_id": "D22",
+      "metric": "停止ルール遵守",
+      "required_data": [
+        "H",
+        "O",
+        "A",
+        "J"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 182,
+      "id": "P03-003",
+      "category_id": "P03",
+      "metric": "決済直後再参入",
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 183,
+      "id": "P03-006",
+      "category_id": "P03",
+      "metric": "早期利確習慣",
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 184,
+      "id": "P03-007",
+      "category_id": "P03",
+      "metric": "損切り延期習慣",
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 196,
+      "id": "D17-002",
+      "category_id": "D17",
+      "metric": "ディスポジション効果",
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 197,
+      "id": "D17-007",
+      "category_id": "D17",
+      "metric": "リベンジトレード仮説",
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 213,
+      "id": "P02-005",
+      "category_id": "P02",
+      "metric": "確率思考型",
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 214,
+      "id": "P02-015",
+      "category_id": "P02",
+      "metric": "状況適応型",
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 229,
+      "id": "P05-003",
+      "category_id": "P05",
+      "metric": "参入タイミング技能",
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 230,
+      "id": "P05-015",
+      "category_id": "P05",
+      "metric": "自己改善技能",
+      "required_data": [
+        "H",
+        "P",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 245,
+      "id": "P04-001",
+      "category_id": "P04",
+      "metric": "損失後の反応変化",
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 246,
+      "id": "P04-003",
+      "category_id": "P04",
+      "metric": "大損益局面のルール遵守",
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 255,
+      "id": "P01-001",
+      "category_id": "P01",
+      "metric": "状況限定のリスク選好",
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 256,
+      "id": "P01-004",
+      "category_id": "P01",
+      "metric": "自己規律",
+      "required_data": [
+        "H",
+        "P",
+        "J"
+      ],
+      "inference_level": "hypothesis"
+    },
+    {
+      "rank": 272,
+      "id": "D20-006",
+      "category_id": "D20",
+      "metric": "固定損切り導入",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual"
+    },
+    {
+      "rank": 273,
+      "id": "D20-008",
+      "category_id": "D20",
+      "metric": "トレーリング導入",
+      "required_data": [
+        "H",
+        "P",
+        "O"
+      ],
+      "inference_level": "counterfactual"
+    },
+    {
+      "rank": 288,
+      "id": "D14-003",
+      "category_id": "D14",
+      "metric": "スリッページ",
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 289,
+      "id": "D14-013",
+      "category_id": "D14",
+      "metric": "費用控除前後の期待値",
+      "required_data": [
+        "H",
+        "O",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 301,
+      "id": "D03-004",
+      "category_id": "D03",
+      "metric": "損益分位点",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 302,
+      "id": "D03-008",
+      "category_id": "D03",
+      "metric": "損失集中度",
+      "required_data": [
+        "H"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 312,
+      "id": "D07-003",
+      "category_id": "D07",
+      "metric": "方向別期待値差",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 313,
+      "id": "D07-004",
+      "category_id": "D07",
+      "metric": "方向別平均損失",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 320,
+      "id": "D12-001",
+      "category_id": "D12",
+      "metric": "移動平均線位置",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 321,
+      "id": "D12-011",
+      "category_id": "D12",
+      "metric": "一目均衡表との関係",
+      "required_data": [
+        "H",
+        "P"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 333,
+      "id": "D15-005",
+      "category_id": "D15",
+      "metric": "相関ポジション重複",
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 334,
+      "id": "D15-009",
+      "category_id": "D15",
+      "metric": "同時大損失頻度",
+      "required_data": [
+        "H",
+        "P",
+        "A"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 344,
+      "id": "D18-001",
+      "category_id": "D18",
+      "metric": "主要経済指標前後の取引",
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 345,
+      "id": "D18-007",
+      "category_id": "D18",
+      "metric": "国際市場の連動",
+      "required_data": [
+        "H",
+        "P",
+        "X"
+      ],
+      "inference_level": "observed"
+    },
+    {
+      "rank": 353,
+      "id": "P06-003",
+      "category_id": "P06",
+      "metric": "抑制制御",
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable"
+    },
+    {
+      "rank": 354,
+      "id": "P06-007",
+      "category_id": "P06",
+      "metric": "予測誤差学習",
+      "required_data": [
+        "H",
+        "O",
+        "J"
+      ],
+      "inference_level": "not_identifiable"
+    },
+    {
+      "rank": 367,
+      "id": "P07-004",
+      "category_id": "P07",
+      "metric": "家庭の金銭教育",
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable"
+    },
+    {
+      "rank": 368,
+      "id": "P07-013",
+      "category_id": "P07",
+      "metric": "過去の投資成功・失敗",
+      "required_data": [
+        "J"
+      ],
+      "inference_level": "not_identifiable"
+    }
+  ],
+  "data_sources": {
+    "H": "約定・ポジション履歴",
+    "P": "価格・市場時系列（決定時点の利用可能性を保持）",
+    "O": "注文・取消・修正・約定履歴",
+    "A": "口座残高・含み損益・入出金・証拠金",
+    "J": "事前戦略・取引日誌・本人の任意報告",
+    "X": "外部指標・経済イベント・取引所仕様"
+  },
+  "evidence_levels": {
+    "L0": "raw observed records, verified provenance",
+    "L1": "deterministic derived measures with definitions",
+    "L2": "association estimated with uncertainty",
+    "L3": "falsifiable psychological or causal hypothesis; multiple explanations",
+    "L4": "corroborated and prospective evidence, still limited",
+    "NI": "not identifiable from trading history alone"
+  },
+  "sensitive_inference_guardrail": {
+    "not_identifiable_categories": [
+      "P06",
+      "P07"
+    ],
+    "do_not_score_neural_or_childhood_traits_from_trades": true,
+    "unvalidated_hypotheses_are_not_personality_diagnoses": true,
+    "decision": "RESEARCH_ONLY"
+  }
+}

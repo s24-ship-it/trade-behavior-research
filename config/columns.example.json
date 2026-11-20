@@ -1,0 +1,14 @@
+{
+  "trade_id": "trade_id",
+  "instrument": "instrument",
+  "side": "side",
+  "entry_time": "entry_time",
+  "exit_time": "exit_time",
+  "quantity": "quantity",
+  "entry_price": "entry_price",
+  "exit_price": "exit_price",
+  "net_pnl": "net_pnl",
+  "gross_pnl": "gross_pnl",
+  "fees": "fees",
+  "currency": "currency"
+}
