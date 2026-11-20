@@ -1,0 +1,41 @@
+name: Import release and verify
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import ZIP (only when uploaded)
+        if: ${{ hashFiles('release_bundle.zip') != '' }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/trade_release"
+          unzip -q release_bundle.zip -d "$RUNNER_TEMP/trade_release"
+          test -f "$RUNNER_TEMP/trade_release/trade-behavior-research/MANIFEST.json"
+          rsync -a --exclude='.github/workflows/' \
+            "$RUNNER_TEMP/trade_release/trade-behavior-research/" ./
+          rm release_bundle.zip
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Tests and release audit
+        run: |
+          python -m pip install -r requirements.txt
+          python -m unittest discover -s tests -v
+          python tools/validate_release.py
+      - name: Publish verified changes
+        run: |
+          git add -A
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore: import verified release v1.1.0'
+          git push origin HEAD:main
