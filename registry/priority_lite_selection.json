@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "source_registry": "trade_history_metric_registry.json",
+  "source_registry": "registry/metrics_full_379.json",
   "source_registry_metric_count": 379,
   "all_category_count": 29,
   "lite_metric_count": 76,

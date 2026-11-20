@@ -1,10 +1,10 @@
 # 売買履歴比較評価テンプレート｜AI入出力プロトコル v1.0
 
 ## 範囲
-- 元指標辞書: `trade_history_metric_registry.json`（379指標、29カテゴリ）。**元ID・項目・カテゴリは改変しない**。
-- 全量: `trade_evaluation_template_FULL_379.xlsx`。Lite: `trade_evaluation_template_LITE_76.xlsx`（76/379=20.1%、29/29カテゴリ）。
-- 順序と抽出根拠: `trade_evaluation_priority_and_lite_selection.json`。
-- 入力交換: `trade_evaluation_long_FULL_379x4.csv` または `trade_evaluation_long_LITE_76x4.csv`。`dataset_id`×`metric_id` を一意キーとする。
+- 元指標辞書: `registry/metrics_full_379.json`（379指標、29カテゴリ）。**元ID・項目・カテゴリは改変しない**。
+- 全量: `templates/evaluation_full_379.xlsx`。Lite: `templates/evaluation_lite_76.xlsx`（76/379=20.1%、29/29カテゴリ）。
+- 順序と抽出根拠: `registry/priority_lite_selection.json`。
+- 入力交換: `templates/evaluation_full_379x4.csv` または `templates/evaluation_lite_76x4.csv`。`dataset_id`×`metric_id` を一意キーとする。
 
 ## 研究目的
 1. 適切な建玉復元・損益整合性を前提に、事実として計測できる取引指標を比較する。

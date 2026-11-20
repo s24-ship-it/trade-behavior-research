@@ -1,0 +1,31 @@
+# Private transaction data and analysis outputs: never publish
+/private/
+/data/
+/raw/
+/outputs/
+/tmp/
+/secrets/
+/*.zip
+!/release_bundle.zip
+*.bak
+*.tmp
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.sqlite
+*.db
+# Typical local caches and OS artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+# Local Excel editing locks
+~$*.xlsx
+~$*.docx

@@ -31,8 +31,8 @@
 
 ## ファイル
 
-- FULL: `CFD_FX_QUANT_OMEGA_FULL_379_evaluated.xlsx` / `.csv`
-- LITE: `CFD_FX_QUANT_OMEGA_LITE_76_evaluated.xlsx` / `.csv`
+- FULL: `examples/ideal-trader/ideal_full_379.xlsx` / `.csv`
+- LITE: `examples/ideal-trader/ideal_lite_76.xlsx` / `.csv`
 - 説明: `00_模範像`、全指標: `01_個別理想評価`、カテゴリ: `02_カテゴリ構成`。
 - 元テンプレ `A_評価` には架空規範の定性的な所見のみ記載。`B_評価` / `C_評価` / `D_評価` は実績入力用に未入力のまま保持。
 - `01_個別理想評価` にはB/C/Dの品質評価スコアを参照する式がある。差分は「品質目標との差」であり利益率の差ではない。

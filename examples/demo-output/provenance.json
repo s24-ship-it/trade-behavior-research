@@ -17,6 +17,10 @@
       "category_count": 29,
       "count_numeric": 19,
       "status": "RESEARCH_ONLY",
+      "data_asof_utc": "2026-10-02T04:38:00+00:00",
+      "source_sha256": {
+        "synthetic_round_trips.csv": "c813cd2d9f62413cc300c7a8fd0d09f28f32063bb2ce8fdac047e1f4e1f759fa"
+      },
       "reference_ideal": "QUANT-OMEGA; normative process benchmark, NOT observed returns",
       "risks": [
         "Naive timestamps (if any) interpreted in Asia/Tokyo; check DST and broker timezone."

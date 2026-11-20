@@ -8,6 +8,7 @@ produce live trading orders, or invent unsupported metrics. It exports a complet
 from __future__ import annotations
 
 import argparse
+import hashlib
 import csv
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -52,7 +53,7 @@ OUTPUT_FIELDS = [
     'ideal_process_quality_target', 'ideal_behavior', 'verification_method',
     'falsification', 'score_1_5', 'score_source', 'process_gap', 'gap_status',
     'alternative_explanations', 'uncertainty', 'next_validation', 'candidate_action',
-    'source_reference',
+    'source_reference', 'data_asof_utc', 'source_sha256',
 ]
 
 
@@ -469,7 +470,7 @@ def measurements(trades: list[Trade]) -> dict[str, dict]:
     return res
 
 
-def output_rows(dataset_id, trades, registry, ideal, lite_ids, mode, rating_by_id, path_names):
+def output_rows(dataset_id, trades, registry, ideal, lite_ids, mode, rating_by_id, path_names, source_hashes=None):
     values=measurements(trades)
     benchmark_by_id={m['metric_id']:m for m in ideal['full_metrics']}
     out=[]
@@ -526,6 +527,8 @@ def output_rows(dataset_id, trades, registry, ideal, lite_ids, mode, rating_by_i
             'next_validation':evidence['validation'] if evidence else bm['verification_method'],
             'candidate_action':bm['ideal_behavior'] if cls=='規範的な運用品質' else '探索的な分析を事前登録して検証。' if cls!='売買履歴から識別不可' else '取引履歴による評価を行わない。',
             'source_reference':';'.join(path_names),
+            'data_asof_utc':max(t.exit_time for t in trades).isoformat(),
+            'source_sha256':';'.join(f'{k}:{v}' for k,v in sorted((source_hashes or {}).items())),
         })
     expected=76 if mode=='lite' else 379
     if len(out)!=expected or len(categories)!=29:
@@ -637,7 +640,7 @@ def make_suggestions(trades, outputs):
                 'リスク額基準に換算し、連敗時の最大建玉増加を抑えるルールを比較。',
                 '当時の戦略仕様と初期ストップ位置を照合。')
     loss_conc=by_id['D03-008']['numeric_value']
-    if isinstance(loss_conc,(int,float)) and n>=10 and loss_conc>0.65:
+    if isinstance(loss_conc,(int,float)) and n>=30 and sum(t.net_pnl<0 for t in trades)>=10 and loss_conc>0.65:
         add('P2','損失の少数取引集中',['D03-008','D04-012'],
             f'ワースト5取引で全実現損失の {loss_conc:.1%} を占める。',
             '厚い裾の市場特性、取引サイズ不一致、契約倍率。',
@@ -708,30 +711,45 @@ def write_behavior(path, dataset_id, outputs):
     path.write_text('\n'.join(lines)+'\n',encoding='utf-8')
 
 
-def write_xlsx(mode,rows,outpath,dataset_id,trades):
-    try:
-        from openpyxl import load_workbook
-    except ImportError:
-        return False
-    template=ROOT / 'templates' / f'evaluation_{"lite_76" if mode=="lite" else "full_379"}.xlsx'
-    wb=load_workbook(template)
-    sheet=wb['A_評価']
+def excel_review_status(machine_status):
+    # Excel dashboard uses Japanese controlled vocabulary; raw machine state is
+    # retained in the note and CSV. Measurement != causal or psychological proof.
+    if machine_status in ('MEASURED', 'DESCRIPTIVE'):
+        return '評価済'
+    if machine_status == 'PARTIAL':
+        return 'レビュー待ち'
+    if machine_status == 'HYPOTHESIS_ONLY':
+        return '仮説段階'
+    if machine_status == 'NOT_IDENTIFIABLE_FROM_TRADES':
+        return '識別不可'
+    if machine_status in ('NEEDS_DATA','NOT_ESTIMABLE','NEEDS_PRICE_PATH_AND_REPLAY','NEEDS_STATISTICAL_VALIDATION'):
+        return '要追加データ'
+    return 'レビュー待ち'
+
+
+def fill_excel_sheet(sheet, rows):
     by_id={r['metric_id']:r for r in rows}
     filled=0
     for line in range(7,sheet.max_row+1):
         mid=sheet.cell(line,4).value
-        if mid not in by_id:continue
+        if mid not in by_id:
+            continue
         row=by_id[mid]
         raw=row['numeric_value']
         if isinstance(raw,str) and (raw.startswith('{') or raw.startswith('[')):
-            val=None  # JSON objects stay in text note; avoid invalid numeric cells
-        else:val=raw if isinstance(raw,(int,float)) and math.isfinite(raw) else None
+            val=None
+        else:
+            val=raw if isinstance(raw,(int,float)) and math.isfinite(raw) else None
         if val is not None:
             sheet.cell(line,11,val)
             filled+=1
         sheet.cell(line,12,row['unit'])
-        sheet.cell(line,14,row['assessment_status'])
-        sheet.cell(line,15, (row['qualitative_finding'] or '数値未測定') + (f" | 内訳: {raw}" if isinstance(raw,str) and raw.startswith('{') else ''))
+        sheet.cell(line,14,excel_review_status(row['assessment_status']))
+        note=(row['qualitative_finding'] or '数値未測定')
+        note += f" | 機械判定: {row['assessment_status']} (評価済は定量記述が存在する意味。方法・比較可能性の承認ではない)"
+        if isinstance(raw,str) and (raw.startswith('{') or raw.startswith('[')):
+            note += f' | 内訳: {raw}'
+        sheet.cell(line,15,safe_spreadsheet_value(note))
         if row['effective_n'] is not None:sheet.cell(line,16,row['effective_n'])
         sheet.cell(line,19,row['evidence_level'])
         sheet.cell(line,20,safe_spreadsheet_value(row['source_reference']))
@@ -740,6 +758,18 @@ def write_xlsx(mode,rows,outpath,dataset_id,trades):
         sheet.cell(line,24,row['next_validation'])
         sheet.cell(line,25,row['candidate_action'])
         if isinstance(row['score_1_5'],int):sheet.cell(line,13,row['score_1_5'])
+    return filled
+
+
+def write_xlsx(mode,rows,outpath,dataset_id,trades):
+    try:
+        from openpyxl import load_workbook
+    except ImportError:
+        return False
+    template=ROOT / 'templates' / f'evaluation_{"lite_76" if mode=="lite" else "full_379"}.xlsx'
+    wb=load_workbook(template)
+    # Single-file workbooks deliberately use A_評価, retaining original behavior.
+    filled=fill_excel_sheet(wb['A_評価'],rows)
     meta=wb['データセット設定']
     meta['B6']=f'{dataset_id} / input round-trip trades'
     meta['B7']=min(r.entry_time for r in trades).date().isoformat()
@@ -747,6 +777,26 @@ def write_xlsx(mode,rows,outpath,dataset_id,trades):
     wb.calculation.fullCalcOnLoad=True
     wb.save(outpath)
     return filled
+
+
+def write_comparison_xlsx(mode, all_rows, outpath):
+    """Create one A-D reviewable workbook, not isolated A sheets for each group."""
+    try:
+        from openpyxl import load_workbook
+    except ImportError:
+        return False
+    template=ROOT / 'templates' / f'evaluation_{"lite_76" if mode=="lite" else "full_379"}.xlsx'
+    wb=load_workbook(template)
+    by_dataset=defaultdict(list)
+    for r in all_rows:
+        by_dataset[r['dataset_id']].append(r)
+    for dataset_id, rows in by_dataset.items():
+        fill_excel_sheet(wb[f'{dataset_id}_評価'], rows)
+    # Comparison gate Q remains 未確認 until user validates comparable
+    # instruments, fees, contract units, regimes and observation windows.
+    wb.calculation.fullCalcOnLoad=True
+    wb.save(outpath)
+    return True
 
 def main(argv=None):
     p=argparse.ArgumentParser(description='Evaluate CFD/FX completed trade history against 379/76 registry; no trade orders or diagnoses.')
@@ -782,16 +832,17 @@ def main(argv=None):
     all_dataset_rows=[]
     recorded=[]
     for id_,paths in sorted(grouping.items()):
-        trades=[];warn=[]
+        trades=[];warn=[];source_hashes={}
         for path in paths:
             ts,ws=read_trades(path,mapping,args.timezone,args.currency)
+            source_hashes[path.name]=hashlib.sha256(path.read_bytes()).hexdigest()
             trades.extend(ts);warn.extend(ws)
         if len({t.trade_id for t in trades})!=len(trades):
             raise DataError('Duplicate trade_id across files; deduplicate or remap and retry')
         if len({t.currency for t in trades})>1:
             raise DataError('Mixed currencies across files: convert before analyzing.')
         trades.sort(key=lambda t:(t.exit_time,t.entry_time,t.trade_id))
-        rows=output_rows(id_,trades,registry,ideal,lite_ids,args.mode,ratings,[p.name for p in paths])
+        rows=output_rows(id_,trades,registry,ideal,lite_ids,args.mode,ratings,[p.name for p in paths],source_hashes)
         folder=output_root/id_
         folder.mkdir(exist_ok=True)
         write_csv(folder/f'evaluation_{args.mode}.csv',rows,OUTPUT_FIELDS)
@@ -805,6 +856,8 @@ def main(argv=None):
                 'time_range_utc':[min(t.entry_time for t in trades).isoformat(),max(t.exit_time for t in trades).isoformat()],
                 'assumed_naive_timezone':args.timezone,'metric_count':len(rows),'category_count':len({r['category_id'] for r in rows}),
                 'count_numeric':sum(r['numeric_value'] is not None for r in rows),'status':'RESEARCH_ONLY',
+                'data_asof_utc':max(t.exit_time for t in trades).isoformat(),
+                'source_sha256':source_hashes,
                 'reference_ideal':'QUANT-OMEGA; normative process benchmark, NOT observed returns',
                 'risks':warn}
         recorded.append(record)
@@ -816,6 +869,7 @@ def main(argv=None):
                    'notice':'Outputs may reveal private trade performance; never commit to public GitHub.'},f,ensure_ascii=False,indent=2)
     if len(recorded)>1:
         write_csv(output_root/f'cross_dataset_{args.mode}.csv',all_dataset_rows,OUTPUT_FIELDS)
+        write_comparison_xlsx(args.mode, all_dataset_rows, output_root/f'comparison_{args.mode}.xlsx')
         (output_root/'COMPARISON_REVIEW.md').write_text(
             '# 横断比較の注意\n\n時期・銘柄・損益通貨・契約倍率・費用・市場状態の差を人が検証するまで数値差を改善と判定しません。'
             ' 指標IDで突合し、交絡因子を調整してください。\n',encoding='utf-8')

@@ -9,7 +9,7 @@ research_status: RESEARCH_ONLY
 has_real_trade_results: false
 metrics: 379
 categories: 29
-registry_file: trade_history_metric_registry.json
+registry_file: registry/metrics_full_379.json
 ---
 
 # TRADE-BEHAVIOR-RESEARCH | AI用研究プロトコル
@@ -148,7 +148,7 @@ r_multiple_i = net_pnl_i / initial_defined_risk_amount_i
 
 ## 9. Research registry: 29 groups, 379 stable metrics
 
-Each record: `ID | name | research question`. Academic disciplines, conservative required sources and inference type are at category header; full machine records in `trade_history_metric_registry.json`.
+Each record: `ID | name | research question`. Academic disciplines, conservative required sources and inference type are at category header; full machine records in `registry/metrics_full_379.json`.
 
 ### D01 / データ品質・取引構造 / type=observed / sources=H,O / academic=データ工学・金融会計
 - `D01-001` 約定件数と取引件数 — 分割約定と完結取引を混同していないか
